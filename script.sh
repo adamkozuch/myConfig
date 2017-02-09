@@ -1,5 +1,5 @@
 #!/bin/sh
-git config --global core.editor vim &&
+ git config --global core.editor vim &&
 sudo apt-get install ruby ruby-dev vim-nox &&
 mkdir -p ~/.vim/autoload ~/.vim/bundle && \
 curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim &&
