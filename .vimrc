@@ -10,7 +10,7 @@ set smartcase		" Do smart case matching
 set autowrite		" Automatically save before commands like :next and :make
 set hidden		" Hide buffers when they are abandoned
 let mapleader = ","
-imap jk <esc><C-c>:w<cr>
+imap jk <esc>
 noremap <Up> <nop>
 noremap <Down> <nop>
 noremap <Left> <nop>
