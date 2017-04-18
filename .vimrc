@@ -1,6 +1,7 @@
 if has("syntax")
   syntax on
 endif
+execute pathogen#infect()
 
 set background=dark
 set number
@@ -9,7 +10,7 @@ set ignorecase		" Do case insensitive matching
 set smartcase		" Do smart case matching
 set autowrite		" Automatically save before commands like :next and :make
 set hidden		" Hide buffers when they are abandoned
-let mapleader = ","
+let mapleader = "\<Space>"
 imap jk <esc>
 noremap <Up> <nop>
 noremap <Down> <nop>
@@ -17,10 +18,22 @@ noremap <Left> <nop>
 noremap <Right> <nop>
 noremap <leader>s <C-c>:w<cr>
 noremap <leader>r :%s/old/new/gc
+noremap <leader>f =i}
+noremap <leader>c ciw
+noremap <leader>v v%
 map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
+
+map J 10j
+map K 10k
+" Bubble single lines
+nmap <C-Up> ddkP
+nmap <C-Down> ddp
+" Bubble multiple lines
+vmap <C-Up> xkP`[V`]
+vmap <C-Down> xp`[V`]
 set pastetoggle=<leader>p
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
 execute pathogen#infect()
@@ -28,6 +41,7 @@ set expandtab
 set shiftwidth=2
 set softtabstop=2
 set autoindent
+
 "making current window more obvous
 augroup BgHighlight
     autocmd!
@@ -47,11 +61,10 @@ function! RenameFile()
         redraw!
     endif
 endfunction
+
 map <leader>n :call RenameFile()<cr>
 " java compile
 " run class
 set wildignore+=node_modules,*.png,*.dll
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+set noswapfile
 filetype plugin indent on
