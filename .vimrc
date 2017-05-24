@@ -10,7 +10,7 @@ set ignorecase		" Do case insensitive matching
 set smartcase		" Do smart case matching
 set autowrite		" Automatically save before commands like :next and :make
 set hidden		" Hide buffers when they are abandoned
-let mapleader = "\<Space>"
+let mapleader = " "
 imap jk <esc>
 noremap <Up> <nop>
 noremap <Down> <nop>
@@ -21,11 +21,12 @@ noremap <leader>r :%s/old/new/gc
 noremap <leader>f =i}
 noremap <leader>c ciw
 noremap <leader>v v%
+map vv V
 map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
-
+map <leader>J J
 map J 10j
 map K 10k
 " Bubble single lines
@@ -34,7 +35,7 @@ nmap <C-Down> ddp
 " Bubble multiple lines
 vmap <C-Up> xkP`[V`]
 vmap <C-Down> xp`[V`]
-set pastetoggle=<leader>p
+map <Leader>p :pastetoggle
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
 execute pathogen#infect()
 set expandtab
@@ -68,3 +69,13 @@ map <leader>n :call RenameFile()<cr>
 set wildignore+=node_modules,*.png,*.dll
 set noswapfile
 filetype plugin indent on
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
+"let g:syntastic_javascript_checkers = ['jshint']
+
