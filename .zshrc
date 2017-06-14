@@ -51,7 +51,7 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git vi-mode)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -73,6 +73,7 @@ alias javaTest="java -cp /Library/JUNIT/junit-4.10.jar:"
 alias web="webpack-dev-server --config"
 alias r="rm -r"
 alias ni="npm install"
+alias work="cd /Users/adam/WorkProjects/"
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
@@ -89,3 +90,14 @@ alias ni="npm install"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+fancy-ctrl-z () {
+  if [[ $#BUFFER -eq 0 ]]; then
+    BUFFER="fg"
+    zle accept-line
+  else
+    zle push-input
+    zle clear-screen
+  fi
+}
+zle -N fancy-ctrl-z
+bindkey '^Z' fancy-ctrl-z

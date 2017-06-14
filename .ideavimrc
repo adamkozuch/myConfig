@@ -1,0 +1,3 @@
+source ~/.vimrc
+nnoremap <leader>t :action GotoClass<CR>
+

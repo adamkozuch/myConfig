@@ -26,9 +26,8 @@ map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
-map <leader>J J
-map J 10j
-map K 10k
+map <C-j>  10j
+map <C-k> 10k
 " Bubble single lines
 nmap <C-Up> ddkP
 nmap <C-Down> ddp
@@ -73,6 +72,8 @@ set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
+ab cl console.log('Log number ');
+"let g:UltiSnipsExpandTrigger=" "
 "let g:syntastic_always_populate_loc_list = 1
 "let g:syntastic_auto_loc_list = 1
 "let g:syntastic_check_on_open = 1
