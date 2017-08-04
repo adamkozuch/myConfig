@@ -21,6 +21,7 @@ noremap <leader>r :%s/old/new/gc
 noremap <leader>f =i}
 noremap <leader>c ciw
 noremap <leader>v v%
+noremap <cr> i<cr><esc>
 map vv V
 map <C-h> <C-w>h
 map <C-j> <C-w>j
@@ -72,11 +73,11 @@ set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
-ab cl console.log('Log number ');
 "let g:UltiSnipsExpandTrigger=" "
 "let g:syntastic_always_populate_loc_list = 1
 "let g:syntastic_auto_loc_list = 1
 "let g:syntastic_check_on_open = 1
 "let g:syntastic_check_on_wq = 0
-"let g:syntastic_javascript_checkers = ['jshint']
-
+let g:syntastic_javascript_checkers = ['eslint']
+let @q = 'biconsole.log(jkwwbea)'
+noremap <leader>l @q
