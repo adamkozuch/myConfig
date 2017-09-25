@@ -11,6 +11,7 @@ set smartcase		" Do smart case matching
 set autowrite		" Automatically save before commands like :next and :make
 set hidden		" Hide buffers when they are abandoned
 let mapleader = " "
+
 imap jk <esc>
 noremap <Up> <nop>
 noremap <Down> <nop>
@@ -35,14 +36,12 @@ nmap <C-Down> ddp
 " Bubble multiple lines
 vmap <C-Up> xkP`[V`]
 vmap <C-Down> xp`[V`]
-map <Leader>p :pastetoggle
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
 execute pathogen#infect()
 set expandtab
 set shiftwidth=2
 set softtabstop=2
 set autoindent
-
 "making current window more obvous
 augroup BgHighlight
     autocmd!
@@ -63,21 +62,58 @@ function! RenameFile()
     endif
 endfunction
 
+function! CompileFile()
+  let file_name = expand('%')
+  let file_no = expand('%:r')
+  exec ':w' 
+  exec ':!javac'  file_name
+  exec ':!java' file_no
+endfunction
+
+function! RunNode()
+  let file_name = expand('%')
+  exec ':w' 
+  exec ':!node'  file_name
+endfunction
+function! RunScala()
+  let file_name = expand('%')
+  exec ':w' 
+  exec ':!scala'  file_name
+endfunction
+
+function! OnJava()
+  abbr log System.out.println("");<Left><Left><Left>
+  abbr main public static void main(String [] args) {<CR>}<Esc>O
+  abbr classg class expand('%:t') {<CR>}<Esc>O
+  abbr fori for( int c = 0; c ; c++) {<CR><CR> }<Esc>?c<CR>
+  noremap <leader>a  :call CompileFile()<CR>
+endfunction
+
+function! OnJS()
+  abbr log console.log("");<Left><Left><Left>
+  noremap <leader>a  :call RunNode()<CR>
+endfunction
+
+function! OnScala()
+  abbr main def main(args: Array[String]) {<CR>}<Esc>O
+  noremap <leader>a  :call RunScala()<CR>
+endfunction
+
+autocmd BufNewFile,BufRead *.java :call OnJava()
+autocmd BufNewFile,BufRead *.js :call OnJS()
+autocmd BufNewFile,BufRead *.scala :call OnScala()
+
 map <leader>n :call RenameFile()<cr>
-" java compile
-" run class
-set wildignore+=node_modules,*.png,*.dll
+set wildignore+=node_modules,*.png,*.dll,*.class,*.cache,*.xml
 set noswapfile
 filetype plugin indent on
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
-
+let g:ycm_server_python_interpreter = 'python'
 "let g:UltiSnipsExpandTrigger=" "
 "let g:syntastic_always_populate_loc_list = 1
 "let g:syntastic_auto_loc_list = 1
 "let g:syntastic_check_on_open = 1
 "let g:syntastic_check_on_wq = 0
 let g:syntastic_javascript_checkers = ['eslint']
-let @q = 'biconsole.log(jkwwbea)'
-noremap <leader>l @q

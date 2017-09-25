@@ -1,3 +1,4 @@
 source ~/.vimrc
 nnoremap <leader>t :action GotoClass<CR>
-
+nnoremap <leader>n :action RenameFile<CR>
+nnoremap <leader>r :action Replace<CR>
