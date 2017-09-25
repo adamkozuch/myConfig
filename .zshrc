@@ -1,8 +1,8 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
-
+setxkbmap -layout us -option ctrl:nocaps
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/adam/.oh-my-zsh
+  export ZSH=/home/adam/.oh-my-zsh
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -51,10 +51,13 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git vi-mode)
+plugins=(git, vi-mode)
 
 source $ZSH/oh-my-zsh.sh
-
+alias idea='/home/adam/Downloads/idea-IC-163.7743.44/bin/idea.sh'
+alias pdf='evince'
+alias slick='cd /home/adam/programmingExperiment/Github/Slick-MongoDB-Driver/src'
+alias jshell='/usr/lib/jvm/java-9-oracle/bin/jshell'
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -68,12 +71,7 @@ source $ZSH/oh-my-zsh.sh
 # else
 #   export EDITOR='mvim'
 # fi
-alias javacTest="javac -cp /Library/JUNIT/junit-4.10.jar"
-alias javaTest="java -cp /Library/JUNIT/junit-4.10.jar:"
-alias web="webpack-dev-server --config"
-alias r="rm -r"
-alias ni="npm install"
-alias work="cd /Users/adam/WorkProjects/"
+
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
@@ -88,16 +86,3 @@ alias work="cd /Users/adam/WorkProjects/"
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-fancy-ctrl-z () {
-  if [[ $#BUFFER -eq 0 ]]; then
-    BUFFER="fg"
-    zle accept-line
-  else
-    zle push-input
-    zle clear-screen
-  fi
-}
-zle -N fancy-ctrl-z
-bindkey '^Z' fancy-ctrl-z
