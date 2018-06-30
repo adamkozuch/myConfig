@@ -1,4 +1,5 @@
 #!/bin/sh
+# install ruby before
  git config --global core.editor vim &&
 sudo apt-get install ruby ruby-dev vim-nox &&
 mkdir -p ~/.vim/autoload ~/.vim/bundle && \
