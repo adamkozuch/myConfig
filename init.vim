@@ -1,5 +1,6 @@
 let g:WincentColorColumnBlacklist = ['diff', 'undotree', 'nerdtree', 'qf']
 
+
 call plug#begin()
   Plug 'mhinz/neovim-remote'
   Plug 'rking/ag.vim'
@@ -205,7 +206,6 @@ nnoremap ; :
 nnoremap : ;
 nnoremap <s-tab> gt
 noremap <leader>f =i}
-noremap <cr> i<cr><esc>
 map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
 map vv V
 tnoremap <Esc> <C-\><C-n>
