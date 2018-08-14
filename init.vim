@@ -52,6 +52,7 @@ nnoremap <leader>t :FzfFiles<cr>
 nnoremap <leader>j :FzfBuffers<cr>
 
 
+
 let g:deoplete#enable_at_startup = 1
 if !exists('g:deoplete#omni#input_patterns')
   let g:deoplete#omni#input_patterns = {}
@@ -123,18 +124,21 @@ function! OnScala()
 endfunction
 
 function! OnPython()
-  nnoremap ,test :-1read ~/.config/nvim/test.py<CR>/placeholder<CR>ciw
+  nnoremap ,test :-1read ~/myConfig/test.py<CR>/placeholder<CR>ciw
   ab deb from pudb set_trace; set_trace()
   noremap <leader>a  :call RunPython()<CR>
   set foldmethod=indent
-  autocmd FileType python set colorcolumn=120
   let g:pymode_options_max_line_length = 120
   let g:jedi#show_call_signatures = "2"
   let g:pymode_lint_on_write = 0
+  let g:pymode_options_colorcolumn = 0
   nnoremap <leader>l :PymodeLint<cr>
   nnoremap <leader>f :PymodeLintAuto<cr>
 nnoremap <leader>. :call OpenTestAlternate()<cr>
 endfunction
+
+autocmd FileType python set colorcolumn=120
+autocmd BufRead *.py setlocal colorcolumn=0
 
 function! OpenTestAlternate()
   let new_file = AlternateForCurrentFile()
