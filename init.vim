@@ -1,6 +1,7 @@
 
-
 call plug#begin()
+  Plug 'blueyed/vim-diminactive'
+  Plug 'jszakmeister/vim-togglecursor'
   Plug 'zchee/deoplete-jedi'
   Plug 'davidhalter/jedi-vim'
   Plug 'tpope/vim-fugitive'
@@ -37,11 +38,14 @@ let g:jedi#show_call_signatures = "2"
 let g:fzf_command_prefix = 'Fzf'
 nnoremap <leader>t :FzfFiles<cr>
 nnoremap <leader>j :FzfBuffers<cr>
+map <C-n> ;NERDTreeToggle<CR>
+
 
 let g:deoplete#enable_at_startup = 1
 if !exists('g:deoplete#omni#input_patterns')
   let g:deoplete#omni#input_patterns = {}
 endif  
+
 
 "window resize
 noremap <Left> <c-w><
@@ -254,3 +258,19 @@ noremap <leader>r :%s/\(<c-r>=expand("<cword>")<cr>\)//gc<LEFT><LEFT><LEFT>
 cnoremap %w <C-R>=expand("<cword>")<cr>
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
 cnoremap new tabnew 
+
+if exists('$TMUX')
+    let &t_EI = "\<Esc>Ptmux;\<Esc>\033]Pl3971ED\033\\"
+    let &t_SI = "\<Esc>Ptmux;\<Esc>\033]PlFBA922\033\\"
+    silent !echo -ne "\<Esc>Ptmux;\<Esc>\033]Pl3971ED\033\\"
+    autocmd VimLeave * silent !echo -ne "\<Esc>Ptmux;\<Esc>\033]Pl3971ED\033\\"
+else
+    let &t_EI = "\033]Pl3971ED\033\\"
+    let &t_SI = "\033]PlFBA922\033\\"
+    silent !echo -ne "\033]Pl3971ED\033\\"
+    autocmd VimLeave * silent !echo -ne "\033]Pl3971ED\033\\"
+  endif
+
+
+hi ColorColumn ctermbg=0 guibg=#eee8d5
+let g:diminactive_use_syntax = 1
