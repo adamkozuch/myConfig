@@ -1,7 +1,5 @@
-
 call plug#begin()
-  Plug 'blueyed/vim-diminactive'
-  Plug 'jszakmeister/vim-togglecursor'
+  Plug 'rking/ag.vim'
   Plug 'zchee/deoplete-jedi'
   Plug 'davidhalter/jedi-vim'
   Plug 'tpope/vim-fugitive'
@@ -13,22 +11,22 @@ call plug#begin()
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'python-mode/python-mode', { 'branch': 'develop' }
   Plug 'scrooloose/nerdcommenter'
-  Plug 'rking/ag.vim'
 call plug#end()
 
-" BASIC SETTINGS
+
+
+map <C-n> ;NERDTreeToggle<CR>
+let g:pymode_lint_on_write = 0
 set tags=./tags;,tags;
 set background=dark
 set number
+set relativenumber
 set showmatch		" Show matching brackets.
 set ignorecase		" Do case insensitive matching
 set smartcase		" Do smart case matching
 set autowrite		" Automatically save before commands like :next and :make
 set foldmethod=syntax
-set foldopen-=block
-set foldnestmax=1
 set hidden		" Hide buffers when they are abandoned
-set relativenumber
 let mapleader = " "
 autocmd FileType python set colorcolumn=120
 let g:pymode_options_max_line_length = 120
@@ -36,14 +34,20 @@ let g:jedi#show_call_signatures = "2"
 let g:fzf_command_prefix = 'Fzf'
 nnoremap <leader>t :FzfFiles<cr>
 nnoremap <leader>j :FzfBuffers<cr>
-map <C-n> ;NERDTreeToggle<CR>
+nnoremap ; :
+nnoremap : ;
 
+nnoremap <leader>g :Gstatus<cr>
 
+let g:pymode_rope_autoimport=1
 let g:deoplete#enable_at_startup = 1
 if !exists('g:deoplete#omni#input_patterns')
   let g:deoplete#omni#input_patterns = {}
 endif  
-
+let g:deoplete#max_abbr_width = 0
+let g:deoplete#max_menu_width = 0
+let g:pymode_options_colorcolumn = 0
+autocmd BufRead *.py setlocal colorcolumn=0
 
 "window resize
 noremap <Left> <c-w><
@@ -56,10 +60,11 @@ noremap <Up> <c-w>-
 noremap <Down> <c-w>+
 
 imap jk <esc>
+
+noremap <leader>l :PymodeLint<cr>
 noremap <leader>s <C-c>:w<cr>
-noremap <leader>r :%s/old/new/gc
+noremap <leader>r :%s/\(<c-r>=expand("<cword>")<cr>\)//gc<LEFT><LEFT><LEFT>
 noremap <leader>f =i}
-noremap <leader>c ciw
 noremap <leader>v v%
 noremap <cr> i<cr><esc>
 map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
@@ -69,8 +74,6 @@ map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
-map <C-j>  10j
-map <C-k> 10k
 " Bubble single lines
 nmap <C-Up> ddkP
 nmap <C-Down> ddp
@@ -147,43 +150,8 @@ function! OnScala()
 endfunction
 
 function! OnPython()
-  nnoremap ,test :-1read ~/myConfig/test.py<CR>/placeholder<CR>ciw
   ab deb from pudb set_trace; set_trace()
   noremap <leader>a  :call RunPython()<CR>
-  set foldmethod=indent
-  let g:pymode_options_max_line_length = 120
-  let g:jedi#show_call_signatures = "2"
-  let g:pymode_lint_on_write = 0
-  let g:pymode_options_colorcolumn = 0
-  nnoremap <leader>l :PymodeLint<cr>
-  nnoremap <leader>f :PymodeLintAuto<cr>
-nnoremap <leader>. :call OpenTestAlternate()<cr>
-endfunction
-
-autocmd FileType python set colorcolumn=120
-autocmd BufRead *.py setlocal colorcolumn=0
-
-function! OpenTestAlternate()
-  let new_file = AlternateForCurrentFile()
-  exec ':e ' . new_file
-endfunction
-
-function! AlternateForCurrentFile()
-  let current_file = expand("%")
-  let file_name = expand("%:t:r")
-  let file_path = expand("%:h")
-  let new_file = file_path . file_name
-  let in_spec = match(current_file, '^Test/') != -1
-
-  if !in_spec
-    echo file_path
-    let new_file = 'test/' . file_path . '/Test' .  file_name . '.py'
-  else
-    let new_file_path = substitute(file_path, 'test/', '', '')
-    let new_file_name = substitute(file_name, 'Test', '', '')
-    let new_file = new_file_path . '/' . new_file_name . '.py'
-  endif
-  return new_file
 endfunction
 
 autocmd BufNewFile,BufRead *.java :call OnJava()
@@ -195,7 +163,8 @@ map <leader>n :call RenameFile()<cr>
 set wildignore+=node_modules,*.png,*.dll,*.class,*.cache,*.xml
 set noswapfile
 filetype plugin indent on
-set statusline=%<%f\ %h%m%r%{FugitiveStatusline()}%=%-14.(%l,%c%V%)\ %P
+set statusline+=%#warningmsg#
+set statusline+=%*
 let g:ycm_server_python_interpreter = 'python'
 "let g:UltiSnipsExpandTrigger=" "
 "let g:syntastic_always_populate_loc_list = 1
@@ -224,50 +193,6 @@ inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
 "autocmd InsertEnter * call deoplete#enable()
 let g:EclimCompletionMethod = 'omnifunc'
 
-"MAPINGS
+set guicursor=
 
 
-nnoremap <CR> za
-nnoremap ; : 
-nnoremap : ;
-nnoremap <s-tab> gt
-noremap <leader>f =i}
-map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
-map vv V
-tnoremap <Esc> <C-\><C-n>
-map <C-h> <C-w>h
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-l> <C-w>l
-noremap <Left> <c-w><
-noremap <Right> <c-w>>
-noremap <silent> <C-Right> <c-w>l
-noremap <silent> <C-Left> <c-w>h
-noremap <silent> <C-Up> <c-w>k
-noremap <silent> <C-Down> <c-w>j
-noremap <Up> <c-w>-
-noremap <Down> <c-w>+
-imap jk <esc>
-noremap <leader>s <C-c>:w<cr>
-
-noremap <leader>r :%s/\(<c-r>=expand("<cword>")<cr>\)//gc<LEFT><LEFT><LEFT>
-
-cnoremap %w <C-R>=expand("<cword>")<cr>
-cnoremap %% <C-R>=expand('%:h').'/'<cr>
-cnoremap new tabnew 
-
-if exists('$TMUX')
-    let &t_EI = "\<Esc>Ptmux;\<Esc>\033]Pl3971ED\033\\"
-    let &t_SI = "\<Esc>Ptmux;\<Esc>\033]PlFBA922\033\\"
-    silent !echo -ne "\<Esc>Ptmux;\<Esc>\033]Pl3971ED\033\\"
-    autocmd VimLeave * silent !echo -ne "\<Esc>Ptmux;\<Esc>\033]Pl3971ED\033\\"
-else
-    let &t_EI = "\033]Pl3971ED\033\\"
-    let &t_SI = "\033]PlFBA922\033\\"
-    silent !echo -ne "\033]Pl3971ED\033\\"
-    autocmd VimLeave * silent !echo -ne "\033]Pl3971ED\033\\"
-  endif
-
-
-hi ColorColumn ctermbg=0 guibg=#eee8d5
-let g:diminactive_use_syntax = 1
