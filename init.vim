@@ -15,6 +15,7 @@ call plug#begin()
   Plug 'scrooloose/nerdcommenter'
   Plug 'rking/ag.vim'
   Plug 'tpope/vim-repeat'
+  Plug 'tmhedberg/SimpylFold'
 call plug#end()
 
 " BASIC SETTINGS
