@@ -14,6 +14,7 @@ call plug#begin()
   Plug 'python-mode/python-mode', { 'branch': 'develop' }
   Plug 'scrooloose/nerdcommenter'
   Plug 'rking/ag.vim'
+  Plug 'tpope/vim-repeat'
 call plug#end()
 
 " BASIC SETTINGS
