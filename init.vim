@@ -16,6 +16,7 @@ call plug#begin()
   Plug 'rking/ag.vim'
   Plug 'tpope/vim-repeat'
   Plug 'tmhedberg/SimpylFold'
+  Plug 'itchyny/lightline.vim'
 call plug#end()
 
 " BASIC SETTINGS
@@ -160,6 +161,7 @@ function! OnPython()
   nnoremap <leader>l :PymodeLint<cr>
   nnoremap <leader>f :PymodeLintAuto<cr>
 nnoremap <leader>. :call OpenTestAlternate()<cr>
+noremap <leader>r :%s/old/new/gc
 endfunction
 
 autocmd FileType python set colorcolumn=120
@@ -273,3 +275,13 @@ else
 
 hi ColorColumn ctermbg=0 guibg=#eee8d5
 let g:diminactive_use_syntax = 1
+let g:lightline = {
+      \ 'colorscheme': 'wombat',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'fugitive#head'
+      \ },
+      \ }
