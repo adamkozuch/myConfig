@@ -1,6 +1,5 @@
 
 call plug#begin()
-  Plug 'blueyed/vim-diminactive'
   Plug 'jszakmeister/vim-togglecursor'
   Plug 'zchee/deoplete-jedi'
   Plug 'davidhalter/jedi-vim'
@@ -17,6 +16,9 @@ call plug#begin()
   Plug 'tpope/vim-repeat'
   Plug 'tmhedberg/SimpylFold'
   Plug 'itchyny/lightline.vim'
+  Plug 'xolox/vim-lua-ftplugin'
+  Plug 'xolox/vim-misc'
+  Plug 'chr4/nginx.vim'
 call plug#end()
 
 " BASIC SETTINGS
@@ -34,20 +36,22 @@ set hidden		" Hide buffers when they are abandoned
 set relativenumber
 let mapleader = " "
 autocmd FileType python set colorcolumn=120
+autocmd BufRead,BufNewFile *.conf setfiletype conf
 let g:pymode_options_max_line_length = 120
-let g:jedi#show_call_signatures = "2"
+let g:jedi#use_tabs_not_buffers = 0
 let g:fzf_command_prefix = 'Fzf'
+let g:notes_directories = ['~/Documents/Notes']
 nnoremap <leader>t :FzfFiles<cr>
 nnoremap <leader>j :FzfBuffers<cr>
 map <C-n> ;NERDTreeToggle<CR>
 
-
+"let g:pymode_rope = 1
 let g:deoplete#enable_at_startup = 1
+let g:deoplete#sources#jedi#enable_typeinfo=1
 if !exists('g:deoplete#omni#input_patterns')
   let g:deoplete#omni#input_patterns = {}
 endif  
-
-
+set mouse=a
 "window resize
 noremap <Left> <c-w><
 noremap <Right> <c-w>>
@@ -155,7 +159,7 @@ function! OnPython()
   noremap <leader>a  :call RunPython()<CR>
   set foldmethod=indent
   let g:pymode_options_max_line_length = 120
-  let g:jedi#show_call_signatures = "2"
+  let g:jedi#show_call_signatures = 2
   let g:pymode_lint_on_write = 0
   let g:pymode_options_colorcolumn = 0
   nnoremap <leader>l :PymodeLint<cr>
@@ -169,7 +173,7 @@ autocmd BufRead *.py setlocal colorcolumn=0
 
 function! OpenTestAlternate()
   let new_file = AlternateForCurrentFile()
-  exec ':e ' . new_file
+  exec ':vs ' . new_file
 endfunction
 
 function! AlternateForCurrentFile()
@@ -234,7 +238,7 @@ let g:EclimCompletionMethod = 'omnifunc'
 nnoremap <CR> za
 nnoremap ; : 
 nnoremap : ;
-nnoremap <s-tab> gt
+nnoremap <tab> gt
 noremap <leader>f =i}
 map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
 map vv V
@@ -259,6 +263,7 @@ noremap <leader>r :%s/\(<c-r>=expand("<cword>")<cr>\)//gc<LEFT><LEFT><LEFT>
 cnoremap %w <C-R>=expand("<cword>")<cr>
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
 cnoremap new tabnew 
+cnoremap rc e ~/myConfig/init.vim
 
 if exists('$TMUX')
     let &t_EI = "\<Esc>Ptmux;\<Esc>\033]Pl3971ED\033\\"
@@ -285,3 +290,6 @@ let g:lightline = {
       \   'gitbranch': 'fugitive#head'
       \ },
       \ }
+call deoplete#custom#source('_',  'max_menu_width', 0)
+call deoplete#custom#source('_',  'max_abbr_width', 0)
+call deoplete#custom#source('_',  'max_kind_width', 0)
