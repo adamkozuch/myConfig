@@ -19,6 +19,7 @@ call plug#begin()
   Plug 'xolox/vim-lua-ftplugin'
   Plug 'xolox/vim-misc'
   Plug 'chr4/nginx.vim'
+  Plug 'vimwiki/vimwiki'
 call plug#end()
 
 " BASIC SETTINGS
@@ -51,7 +52,6 @@ let g:deoplete#sources#jedi#enable_typeinfo=1
 if !exists('g:deoplete#omni#input_patterns')
   let g:deoplete#omni#input_patterns = {}
 endif  
-set mouse=a
 "window resize
 noremap <Left> <c-w><
 noremap <Right> <c-w>>
@@ -132,7 +132,7 @@ endfunction
 function! RunPython()
   let file_name = expand('%')
   exec ':w' 
-  exec ':!python3'  file_name
+  exec ':!python3 -m unittest'  file_name
 endfunction
 
 function! OnJava()
@@ -173,7 +173,7 @@ autocmd BufRead *.py setlocal colorcolumn=0
 
 function! OpenTestAlternate()
   let new_file = AlternateForCurrentFile()
-  exec ':vs ' . new_file
+  exec ':e ' . new_file
 endfunction
 
 function! AlternateForCurrentFile()
