@@ -1,0 +1,13 @@
+<<<<<<< HEAD
+set -g prefix C-space
+unbind-key C-b
+bind-key C-space send-prefix
+bind-key h select-pane -L
+bind-key j select-pane -D 
+bind-key k select-pane -U
+bind-key l select-pane -R
+set-option -g allow-rename off
+source-file ~/.tmux.conf
+=======
+set -sg escape-time 0
+>>>>>>> 9eabc2bfa768d0c3ec44b9206d24593e88b3a7f1

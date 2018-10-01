@@ -1,6 +1,11 @@
+let g:WincentColorColumnBlacklist = ['diff', 'undotree', 'nerdtree', 'qf']
+
 
 call plug#begin()
-  Plug 'jszakmeister/vim-togglecursor'
+  Plug 'mhinz/neovim-remote'
+  Plug 'rking/ag.vim'
+  Plug 'scrooloose/nerdcommenter'
+  Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
   Plug 'zchee/deoplete-jedi'
   Plug 'davidhalter/jedi-vim'
   Plug 'tpope/vim-fugitive'
@@ -10,16 +15,12 @@ call plug#begin()
   Plug '/usr/local/opt/fzf'
   Plug 'junegunn/fzf.vim'
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+  Plug 'ensime/ensime-vim', { 'do': ':UpdateRemotePlugins' }
   Plug 'python-mode/python-mode', { 'branch': 'develop' }
-  Plug 'scrooloose/nerdcommenter'
-  Plug 'rking/ag.vim'
-  Plug 'tpope/vim-repeat'
-  Plug 'tmhedberg/SimpylFold'
-  Plug 'itchyny/lightline.vim'
-  Plug 'xolox/vim-lua-ftplugin'
-  Plug 'xolox/vim-misc'
-  Plug 'chr4/nginx.vim'
-  Plug 'vimwiki/vimwiki'
+  Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
 call plug#end()
 
 " BASIC SETTINGS
@@ -34,67 +35,36 @@ set foldmethod=syntax
 set foldopen-=block
 set foldnestmax=1
 set hidden		" Hide buffers when they are abandoned
-set relativenumber
-let mapleader = " "
-autocmd FileType python set colorcolumn=120
-autocmd BufRead,BufNewFile *.conf setfiletype conf
-let g:pymode_options_max_line_length = 120
-let g:jedi#use_tabs_not_buffers = 0
-let g:fzf_command_prefix = 'Fzf'
-let g:notes_directories = ['~/Documents/Notes']
-nnoremap <leader>t :FzfFiles<cr>
-nnoremap <leader>j :FzfBuffers<cr>
-map <C-n> ;NERDTreeToggle<CR>
-
-"let g:pymode_rope = 1
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#sources#jedi#enable_typeinfo=1
-if !exists('g:deoplete#omni#input_patterns')
-  let g:deoplete#omni#input_patterns = {}
-endif  
-"window resize
-noremap <Left> <c-w><
-noremap <Right> <c-w>>
-noremap <silent> <C-Right> <c-w>l
-noremap <silent> <C-Left> <c-w>h
-noremap <silent> <C-Up> <c-w>k
-noremap <silent> <C-Down> <c-w>j
-noremap <Up> <c-w>-
-noremap <Down> <c-w>+
-
-imap jk <esc>
-noremap <leader>s <C-c>:w<cr>
-noremap <leader>r :%s/old/new/gc
-noremap <leader>f =i}
-noremap <leader>c ciw
-noremap <leader>v v%
-noremap <cr> i<cr><esc>
-map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
-map vv V
-tnoremap <Esc> <C-\><C-n>
-map <C-h> <C-w>h
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-l> <C-w>l
-map <C-j>  10j
-map <C-k> 10k
-" Bubble single lines
-nmap <C-Up> ddkP
-nmap <C-Down> ddp
-" Bubble multiple lines
-vmap <C-Up> xkP`[V`]
-vmap <C-Down> xp`[V`]
-cnoremap %% <C-R>=expand('%:h').'/'<cr>
 set expandtab
 set shiftwidth=2
 set softtabstop=2
 set autoindent
+set relativenumber
+
+" PLUGIN SETTINGS AND MAPPINGS
+
+let g:ag_highlight=1
+nnoremap ,html :-1read /home/adam/.config/nvim/template.html<CR> 3jwf>a
+map <C-n> ;NERDTreeToggle<CR>
+let mapleader = " "
+let g:fzf_command_prefix = 'Fzf'
+nnoremap <leader>t :FzfFiles<cr>
+nnoremap <leader>j :FzfBuffers<cr>
+
+
+
+let g:deoplete#enable_at_startup = 1
+if !exists('g:deoplete#omni#input_patterns')
+  let g:deoplete#omni#input_patterns = {}
+endif  
+
 "making current window more obvous
 augroup BgHighlight
     autocmd!
     autocmd WinEnter * set cul
     autocmd WinLeave * set nocul
 augroup END
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " RENAME CURRENT FILE
@@ -132,7 +102,7 @@ endfunction
 function! RunPython()
   let file_name = expand('%')
   exec ':w' 
-  exec ':!python3 -m unittest'  file_name
+  exec ':!python3'  file_name
 endfunction
 
 function! OnJava()
@@ -159,13 +129,12 @@ function! OnPython()
   noremap <leader>a  :call RunPython()<CR>
   set foldmethod=indent
   let g:pymode_options_max_line_length = 120
-  let g:jedi#show_call_signatures = 2
+  let g:jedi#show_call_signatures = "2"
   let g:pymode_lint_on_write = 0
   let g:pymode_options_colorcolumn = 0
   nnoremap <leader>l :PymodeLint<cr>
   nnoremap <leader>f :PymodeLintAuto<cr>
-  nnoremap <leader>. :call OpenTestAlternate()<cr>
-  noremap <leader>r :%s/old/new/gc
+nnoremap <leader>. :call OpenTestAlternate()<cr>
 endfunction
 
 autocmd FileType python set colorcolumn=120
@@ -204,7 +173,8 @@ set wildignore+=node_modules,*.png,*.dll,*.class,*.cache,*.xml
 set noswapfile
 filetype plugin indent on
 set statusline=%<%f\ %h%m%r%{FugitiveStatusline()}%=%-14.(%l,%c%V%)\ %P
-let g:ycm_server_python_interpreter = 'python'
+"set statusline+=%#warningmsg#
+"set statusline+=%*
 "let g:UltiSnipsExpandTrigger=" "
 "let g:syntastic_always_populate_loc_list = 1
 "let g:syntastic_auto_loc_list = 1
@@ -238,7 +208,7 @@ let g:EclimCompletionMethod = 'omnifunc'
 nnoremap <CR> za
 nnoremap ; : 
 nnoremap : ;
-nnoremap <tab> gt
+nnoremap <s-tab> gt
 noremap <leader>f =i}
 map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
 map vv V
@@ -263,33 +233,3 @@ noremap <leader>r :%s/\(<c-r>=expand("<cword>")<cr>\)//gc<LEFT><LEFT><LEFT>
 cnoremap %w <C-R>=expand("<cword>")<cr>
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
 cnoremap new tabnew 
-cnoremap rc e ~/myConfig/init.vim<C-b>
-cnoremap test :!python3 -m unittest discover -s ./test/ -p 'Test*.py'
-if exists('$TMUX')
-    let &t_EI = "\<Esc>Ptmux;\<Esc>\033]Pl3971ED\033\\"
-    let &t_SI = "\<Esc>Ptmux;\<Esc>\033]PlFBA922\033\\"
-    silent !echo -ne "\<Esc>Ptmux;\<Esc>\033]Pl3971ED\033\\"
-    autocmd VimLeave * silent !echo -ne "\<Esc>Ptmux;\<Esc>\033]Pl3971ED\033\\"
-else
-    let &t_EI = "\033]Pl3971ED\033\\"
-    let &t_SI = "\033]PlFBA922\033\\"
-    silent !echo -ne "\033]Pl3971ED\033\\"
-    autocmd VimLeave * silent !echo -ne "\033]Pl3971ED\033\\"
-  endif
-
-
-hi ColorColumn ctermbg=0 guibg=#eee8d5
-let g:diminactive_use_syntax = 1
-let g:lightline = {
-      \ 'colorscheme': 'wombat',
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-      \ },
-      \ 'component_function': {
-      \   'gitbranch': 'fugitive#head'
-      \ },
-      \ }
-call deoplete#custom#source('_',  'max_menu_width', 0)
-call deoplete#custom#source('_',  'max_abbr_width', 0)
-call deoplete#custom#source('_',  'max_kind_width', 0)
