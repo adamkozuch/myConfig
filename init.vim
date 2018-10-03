@@ -46,6 +46,7 @@ nnoremap <leader>t :FzfFiles<cr>
 nnoremap <leader>j :FzfBuffers<cr>
 map <C-n> ;NERDTreeToggle<CR>
 
+
 "let g:pymode_rope = 1
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#sources#jedi#enable_typeinfo=1
@@ -293,3 +294,6 @@ let g:lightline = {
 call deoplete#custom#source('_',  'max_menu_width', 0)
 call deoplete#custom#source('_',  'max_abbr_width', 0)
 call deoplete#custom#source('_',  'max_kind_width', 0)
+
+nnoremap <leader>s :Ag! --python "\b\s?<C-R><C-W>\b"<CR>:cw<CR>:redr!<CR>
+
