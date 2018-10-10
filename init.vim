@@ -1,5 +1,6 @@
 
 call plug#begin()
+  Plug 'bling/vim-bufferline'
   Plug 'jszakmeister/vim-togglecursor'
   Plug 'zchee/deoplete-jedi'
   Plug 'davidhalter/jedi-vim'
@@ -14,7 +15,6 @@ call plug#begin()
   Plug 'scrooloose/nerdcommenter'
   Plug 'rking/ag.vim'
   Plug 'tpope/vim-repeat'
-  Plug 'tmhedberg/SimpylFold'
   Plug 'itchyny/lightline.vim'
   Plug 'xolox/vim-lua-ftplugin'
   Plug 'xolox/vim-misc'
@@ -32,6 +32,7 @@ nnoremap <F5> :call LanguageClient_contextMenu()<CR>
 nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
 nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+
 
 " BASIC SETTINGS
 set tags=./tags;,tags;
