@@ -20,7 +20,18 @@ call plug#begin()
   Plug 'xolox/vim-misc'
   Plug 'chr4/nginx.vim'
   Plug 'vimwiki/vimwiki'
+  Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+  Plug 'metakirby5/codi.vim'
 call plug#end()
+
+nnoremap <F5> :call LanguageClient_contextMenu()<CR>
+" Or map each action separately
+nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
 
 " BASIC SETTINGS
 set tags=./tags;,tags;
@@ -77,8 +88,6 @@ map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
-map <C-j>  10j
-map <C-k> 10k
 " Bubble single lines
 nmap <C-Up> ddkP
 nmap <C-Down> ddp
@@ -161,8 +170,9 @@ function! OnPython()
   set foldmethod=indent
   let g:pymode_options_max_line_length = 120
   let g:jedi#show_call_signatures = 2
-  let g:pymode_lint_on_write = 0
   let g:pymode_options_colorcolumn = 0
+  let g:pymode_lint_cwindow = 0
+  let g:pymode_lint_on_write = 1
   nnoremap <leader>l :PymodeLint<cr>
   nnoremap <leader>f :PymodeLintAuto<cr>
   nnoremap <leader>. :call OpenTestAlternate()<cr>
@@ -297,3 +307,4 @@ call deoplete#custom#source('_',  'max_kind_width', 0)
 
 nnoremap <leader>s :Ag! --python "\b\s?<C-R><C-W>\b"<CR>:cw<CR>:redr!<CR>
 
+let g:pymode_rope_rename_module_bind = '<leader> r'
