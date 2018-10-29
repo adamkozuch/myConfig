@@ -1,5 +1,9 @@
 
 call plug#begin()
+  Plug 'vim-scripts/repmo.vim'
+  Plug 'posva/vim-vue'
+  Plug 'ternjs/tern_for_vim'
+  Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
   Plug 'airblade/vim-gitgutter'
   Plug 'bling/vim-bufferline'
   Plug 'jszakmeister/vim-togglecursor'
@@ -21,6 +25,7 @@ call plug#begin()
   Plug 'xolox/vim-misc'
   Plug 'chr4/nginx.vim'
   Plug 'vimwiki/vimwiki'
+  Plug 'gcmt/taboo.vim'
   Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
@@ -85,7 +90,7 @@ noremap <leader>f =i}
 noremap <leader>c ciw
 noremap <leader>v v%
 noremap <cr> i<cr><esc>
-map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
+noremap <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
 map vv V
 tnoremap <Esc> <C-\><C-n>
 map <C-h> <C-w>h
@@ -105,108 +110,108 @@ set softtabstop=2
 set autoindent
 "making current window more obvous
 augroup BgHighlight
-    autocmd!
-    autocmd WinEnter * set cul
-    autocmd WinLeave * set nocul
+  autocmd!
+  autocmd WinEnter * set cul
+  autocmd WinLeave * set nocul
 augroup END
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " RENAME CURRENT FILE
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 function! RenameFile()
-    let old_name = expand('%')
-    let new_name = input('New file name: ', expand('%'), 'file')
-    if new_name != '' && new_name != old_name
-        exec ':saveas ' . new_name
-        exec ':silent !rm ' . old_name
-        redraw!
-    endif
+  let old_name = expand('%')
+  let new_name = input('New file name: ', expand('%'), 'file')
+  if new_name != '' && new_name != old_name
+      exec ':saveas ' . new_name
+      exec ':silent !rm ' . old_name
+      redraw!
+  endif
 endfunction
 
 function! CompileFile()
-  let file_name = expand('%')
-  let file_no = expand('%:r')
-  exec ':w' 
-  exec ':!javac'  file_name
-  exec ':!java' file_no
+let file_name = expand('%')
+let file_no = expand('%:r')
+exec ':w' 
+exec ':!javac'  file_name
+exec ':!java' file_no
 endfunction
 
 function! RunNode()
-  let file_name = expand('%')
-  exec ':w' 
-  exec ':!node'  file_name
+let file_name = expand('%')
+exec ':w' 
+exec ':!node'  file_name
 endfunction
 
 function! RunScala()
-  let file_name = expand('%')
-  exec ':w' 
-  exec ':!scala'  file_name
+let file_name = expand('%')
+exec ':w' 
+exec ':!scala'  file_name
 endfunction
 
 function! RunPython()
-  let file_name = expand('%')
-  exec ':w' 
-  exec ':!python3 -m unittest'  file_name
+let file_name = expand('%')
+exec ':w' 
+exec ':!python3 -m unittest'  file_name
 endfunction
 
 function! OnJava()
-  abbr log System.out.println("");<Left><Left><Left>
-  abbr main public static void main(String [] args) {<CR>}<Esc>O
-  abbr classg class expand('%:t') {<CR>}<Esc>O
-  abbr fori for( int c = 0; c ; c++) {<CR><CR> }<Esc>?c<CR>
-  noremap <leader>a  :call CompileFile()<CR>
+abbr log System.out.println("");<Left><Left><Left>
+abbr main public static void main(String [] args) {<CR>}<Esc>O
+abbr classg class expand('%:t') {<CR>}<Esc>O
+abbr fori for( int c = 0; c ; c++) {<CR><CR> }<Esc>?c<CR>
+noremap <leader>a  :call CompileFile()<CR>
 endfunction
 
 function! OnJS()
-  abbr log console.log("");<Left><Left><Left>
-  noremap <leader>a  :call RunNode()<CR>
+abbr log console.log("");<Left><Left><Left>
+noremap <leader>a  :call RunNode()<CR>
 endfunction
 
 function! OnScala()
-  abbr main def main(args: Array[String]) {<CR>}<Esc>O
-  noremap <leader>a  :call RunScala()<CR>
+abbr main def main(args: Array[String]) {<CR>}<Esc>O
+noremap <leader>a  :call RunScala()<CR>
 endfunction
 
 function! OnPython()
-  nnoremap ,test :-1read ~/myConfig/test.py<CR>/placeholder<CR>ciw
-  ab deb from pudb set_trace; set_trace()
-  noremap <leader>a  :call RunPython()<CR>
-  set foldmethod=indent
-  let g:pymode_options_max_line_length = 120
-  let g:jedi#show_call_signatures = 2
-  let g:pymode_options_colorcolumn = 0
-  let g:pymode_lint_cwindow = 0
-  let g:pymode_lint_on_write = 1
-  nnoremap <leader>l :PymodeLint<cr>
-  nnoremap <leader>f :PymodeLintAuto<cr>
-  nnoremap <leader>. :call OpenTestAlternate()<cr>
-  noremap <leader>r :%s/old/new/gc
+nnoremap ,test :-1read ~/myConfig/test.py<CR>/placeholder<CR>ciw
+ab deb from pudb set_trace; set_trace()
+noremap <leader>a  :call RunPython()<CR>
+set foldmethod=indent
+let g:pymode_options_max_line_length = 120
+let g:jedi#show_call_signatures = 2
+let g:pymode_options_colorcolumn = 0
+let g:pymode_lint_cwindow = 0
+let g:pymode_lint_on_write = 1
+nnoremap <leader>l :PymodeLint<cr>
+nnoremap <leader>f :PymodeLintAuto<cr>
+nnoremap <leader>. :call OpenTestAlternate()<cr>
+noremap <leader>r :%s/old/new/gc
 endfunction
 
 autocmd FileType python set colorcolumn=120
 autocmd BufRead *.py setlocal colorcolumn=0
 
 function! OpenTestAlternate()
-  let new_file = AlternateForCurrentFile()
-  exec ':e ' . new_file
+let new_file = AlternateForCurrentFile()
+exec ':e ' . new_file
 endfunction
 
 function! AlternateForCurrentFile()
-  let current_file = expand("%")
-  let file_name = expand("%:t:r")
-  let file_path = expand("%:h")
-  let new_file = file_path . file_name
-  let in_spec = match(current_file, '^Test/') != -1
+let current_file = expand("%")
+let file_name = expand("%:t:r")
+let file_path = expand("%:h")
+let new_file = file_path . file_name
+let in_spec = match(current_file, '^Test/') != -1
 
-  if !in_spec
-    echo file_path
-    let new_file = 'test/' . file_path . '/Test' .  file_name . '.py'
-  else
-    let new_file_path = substitute(file_path, 'test/', '', '')
-    let new_file_name = substitute(file_name, 'Test', '', '')
-    let new_file = new_file_path . '/' . new_file_name . '.py'
-  endif
-  return new_file
+if !in_spec
+  echo file_path
+  let new_file = 'test/' . file_path . '/Test' .  file_name . '.py'
+else
+  let new_file_path = substitute(file_path, 'test/', '', '')
+  let new_file_name = substitute(file_name, 'Test', '', '')
+  let new_file = new_file_path . '/' . new_file_name . '.py'
+endif
+return new_file
 endfunction
 
 autocmd BufNewFile,BufRead *.java :call OnJava()
@@ -255,7 +260,6 @@ nnoremap ; :
 nnoremap : ;
 nnoremap <tab> gt
 noremap <leader>f =i}
-map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
 map vv V
 tnoremap <Esc> <C-\><C-n>
 map <C-h> <C-w>h
@@ -312,3 +316,8 @@ call deoplete#custom#source('_',  'max_kind_width', 0)
 nnoremap <leader>s :Ag! --python "\b\s?<C-R><C-W>\b"<CR>:cw<CR>:redr!<CR>
 
 let g:pymode_rope_rename_module_bind = '<leader> r'
+highlight Visual cterm=reverse ctermbg=NONE
+let g:deoplete#sources#ternjs#types = 1
+nnoremap <Leader>r :%s/\<<C-r><C-w>\>/
+let repmo_key = ","
+let repmo_revkey = "]"
