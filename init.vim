@@ -1,7 +1,9 @@
 
 call plug#begin()
-  Plug 'derekwyatt/vim-scala'
-  Plug 'ensime/ensime-vim', { 'do': ':UpdateRemotePlugins' }
+  Plug 'vim-scripts/repmo.vim'
+  Plug 'posva/vim-vue'
+  Plug 'ternjs/tern_for_vim'
+  Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
   Plug 'airblade/vim-gitgutter'
   Plug 'bling/vim-bufferline'
   Plug 'jszakmeister/vim-togglecursor'
@@ -23,6 +25,7 @@ call plug#begin()
   Plug 'xolox/vim-misc'
   Plug 'chr4/nginx.vim'
   Plug 'vimwiki/vimwiki'
+  Plug 'gcmt/taboo.vim'
   Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
@@ -87,7 +90,7 @@ noremap <leader>f =i}
 noremap <leader>c ciw
 noremap <leader>v v%
 noremap <cr> i<cr><esc>
-map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
+noremap <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
 map vv V
 tnoremap <Esc> <C-\><C-n>
 map <C-h> <C-w>h
@@ -314,5 +317,3 @@ call deoplete#custom#source('_',  'max_kind_width', 0)
 nnoremap <leader>s :Ag! --python "\b\s?<C-R><C-W>\b"<CR>:cw<CR>:redr!<CR>
 
 let g:pymode_rope_rename_module_bind = '<leader> r'
- autocmd BufWritePost *.scala silent :EnTypeCheck
-
