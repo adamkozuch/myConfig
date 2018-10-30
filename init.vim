@@ -1,5 +1,7 @@
 
 call plug#begin()
+  Plug 'derekwyatt/vim-scala'
+  Plug 'ensime/ensime-vim', { 'do': ':UpdateRemotePlugins' }
   Plug 'airblade/vim-gitgutter'
   Plug 'bling/vim-bufferline'
   Plug 'jszakmeister/vim-togglecursor'
@@ -312,3 +314,5 @@ call deoplete#custom#source('_',  'max_kind_width', 0)
 nnoremap <leader>s :Ag! --python "\b\s?<C-R><C-W>\b"<CR>:cw<CR>:redr!<CR>
 
 let g:pymode_rope_rename_module_bind = '<leader> r'
+ autocmd BufWritePost *.scala silent :EnTypeCheck
+
