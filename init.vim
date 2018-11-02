@@ -1,6 +1,8 @@
 
 call plug#begin()
-  Plug 'vim-scripts/repmo.vim'
+  Plug 'zhaocai/GoldenView.Vim'
+  Plug 'ensime/ensime-vim', { 'do': ':UpdateRemotePlugins' }
+  Plug 'nvie/vim-flake8'
   Plug 'posva/vim-vue'
   Plug 'ternjs/tern_for_vim'
   Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
@@ -16,7 +18,7 @@ call plug#begin()
   Plug '/usr/local/opt/fzf'
   Plug 'junegunn/fzf.vim'
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-  Plug 'python-mode/python-mode', { 'branch': 'develop' }
+  "Plug 'python-mode/python-mode', { 'branch': 'develop' }
   Plug 'scrooloose/nerdcommenter'
   Plug 'rking/ag.vim'
   Plug 'tpope/vim-repeat'
@@ -42,6 +44,7 @@ command Gs Gstatus
 command Gc Gcommit
 
 
+
 " BASIC SETTINGS
 set tags=./tags;,tags;
 set background=dark
@@ -58,11 +61,9 @@ set relativenumber
 let mapleader = " "
 autocmd FileType python set colorcolumn=120
 autocmd BufRead,BufNewFile *.conf setfiletype conf
-let g:pymode_options_max_line_length = 120
-let g:jedi#use_tabs_not_buffers = 0
 let g:fzf_command_prefix = 'Fzf'
 let g:notes_directories = ['~/Documents/Notes']
-nnoremap <leader>t :FzfFiles<cr>
+nnoremap <leader>t :FzfGFiles<cr>
 nnoremap <leader>j :FzfBuffers<cr>
 map <C-n> ;NERDTreeToggle<CR>
 
@@ -176,14 +177,17 @@ function! OnPython()
   nnoremap ,test :-1read ~/myConfig/test.py<CR>/placeholder<CR>ciw
   ab deb from pudb set_trace; set_trace()
   noremap <leader>a  :call RunPython()<CR>
-  set foldmethod=indent
-  let g:pymode_options_max_line_length = 120
-  let g:jedi#show_call_signatures = 2
-  let g:pymode_options_colorcolumn = 0
-  let g:pymode_lint_cwindow = 0
-  let g:pymode_lint_on_write = 1
-  nnoremap <leader>l :PymodeLint<cr>
-  nnoremap <leader>f :PymodeLintAuto<cr>
+  set foldmethod=manual
+  "let g:pymode_options_max_line_length = 120
+  let g:jedi#show_call_signatures = 1
+  "let g:pymode_options_colorcolumn = 0
+  "let g:pymode_lint_cwindow = 0
+  "let g:pymode_lint_on_write = 1
+  let g:jedi#use_tabs_not_buffers = 0
+  let g:jedi#usages_command = "<leader>s"
+  let g:jedi#rename_command = "<leader>r"
+  "nnoremap <leader>l :PymodeLint<cr>
+  "nnoremap <leader>f :PymodeLintAuto<cr>
   nnoremap <leader>. :call OpenTestAlternate()<cr>
   noremap <leader>r :%s/old/new/gc
 endfunction
@@ -300,6 +304,18 @@ else
 
 hi ColorColumn ctermbg=0 guibg=#eee8d5
 let g:diminactive_use_syntax = 1
+function! LightlineFilename()
+  let root = fnamemodify(get(b:, 'git_dir'), ':h')
+  let path = expand('%:p')
+  if path[:len(root)-1] ==# root
+    return path[len(root)+1:]
+  endif
+  return expand('%')
+endfunction
+
+
+
+
 let g:lightline = {
       \ 'colorscheme': 'wombat',
       \ 'active': {
@@ -307,7 +323,8 @@ let g:lightline = {
       \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
       \ },
       \ 'component_function': {
-      \   'gitbranch': 'fugitive#head'
+      \   'gitbranch': 'fugitive#head',
+      \   'filename': 'LightlineFilename'
       \ },
       \ }
 call deoplete#custom#source('_',  'max_menu_width', 0)
@@ -317,3 +334,7 @@ call deoplete#custom#source('_',  'max_kind_width', 0)
 nnoremap <leader>s :Ag! --python "\b\s?<C-R><C-W>\b"<CR>:cw<CR>:redr!<CR>
 
 let g:pymode_rope_rename_module_bind = '<leader> r'
+let g:golden_ratio_exclude_nonmodifiable = 1
+let g:goldenview__enable_default_mapping = 0
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
