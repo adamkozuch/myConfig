@@ -42,6 +42,13 @@ nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
 nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
 command Gs Gstatus
 command Gc Gcommit
+let g:fzf_history_dir = '~/.local/share/fzf-history'
+let g:fzf_buffers_jump = 1
+let g:fzf_action = {
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-s': 'split',
+  \ 'ctrl-v': 'vsplit' }
+
 
 
 
@@ -63,7 +70,8 @@ autocmd FileType python set colorcolumn=120
 autocmd BufRead,BufNewFile *.conf setfiletype conf
 let g:fzf_command_prefix = 'Fzf'
 let g:notes_directories = ['~/Documents/Notes']
-nnoremap <leader>t :FzfGFiles<cr>
+"nnoremap <leader>t :FzfGFiles<cr>
+nnoremap <silent> <leader>t :call FZFOpen(':FzfGFiles')<CR>
 nnoremap <leader>j :FzfBuffers<cr>
 map <C-n> ;NERDTreeToggle<CR>
 
@@ -337,4 +345,11 @@ let g:pymode_rope_rename_module_bind = '<leader> r'
 let g:golden_ratio_exclude_nonmodifiable = 1
 let g:goldenview__enable_default_mapping = 0
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+function! FZFOpen(command_str)
+  if (expand('%') =~# 'NERD_tree' && winnr('$') > 1)
+    exe "normal! \<c-w>\<c-w>"
+  endif
+  exe 'normal! ' . a:command_str . "\<cr>"
+endfunction
 
