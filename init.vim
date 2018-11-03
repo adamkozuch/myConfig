@@ -1,5 +1,7 @@
 
 call plug#begin()
+  Plug 'mhinz/vim-startify'
+  Plug 'morhetz/gruvbox'
   Plug 'zhaocai/GoldenView.Vim'
   Plug 'ensime/ensime-vim', { 'do': ':UpdateRemotePlugins' }
   Plug 'nvie/vim-flake8'
@@ -188,6 +190,7 @@ function! OnPython()
   set foldmethod=manual
   "let g:pymode_options_max_line_length = 120
   let g:jedi#show_call_signatures = 1
+  let g:jedi#popup_on_dot = 0
   "let g:pymode_options_colorcolumn = 0
   "let g:pymode_lint_cwindow = 0
   "let g:pymode_lint_on_write = 1
@@ -323,9 +326,9 @@ endfunction
 
 
 
-
+colorscheme gruvbox
 let g:lightline = {
-      \ 'colorscheme': 'wombat',
+      \ 'colorscheme': 'landscape',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
@@ -333,7 +336,7 @@ let g:lightline = {
       \ 'component_function': {
       \   'gitbranch': 'fugitive#head',
       \   'filename': 'LightlineFilename'
-      \ },
+      \ }
       \ }
 call deoplete#custom#source('_',  'max_menu_width', 0)
 call deoplete#custom#source('_',  'max_abbr_width', 0)
@@ -353,3 +356,5 @@ function! FZFOpen(command_str)
   exe 'normal! ' . a:command_str . "\<cr>"
 endfunction
 
+imap <C-L> <C-X><C-L> 
+let g:deoplete#max_list = 10
