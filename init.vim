@@ -58,6 +58,7 @@ let g:fzf_action = {
 set tags=./tags;,tags;
 set background=dark
 set number
+"set showmode off
 set showmatch		" Show matching brackets.
 set ignorecase		" Do case insensitive matching
 set smartcase		" Do smart case matching
@@ -184,6 +185,7 @@ function! OnScala()
 endfunction
 
 function! OnPython()
+  nnoremap <C-]>  :call jedi#goto_definitions()<CR>
   nnoremap ,test :-1read ~/myConfig/test.py<CR>/placeholder<CR>ciw
   ab deb from pudb set_trace; set_trace()
   noremap <leader>a  :call RunPython()<CR>
@@ -197,7 +199,7 @@ function! OnPython()
   let g:jedi#use_tabs_not_buffers = 0
   let g:jedi#usages_command = "<leader>s"
   let g:jedi#rename_command = "<leader>r"
-  "nnoremap <leader>l :PymodeLint<cr>
+  nnoremap <leader>l :call Flake8()<cr>
   "nnoremap <leader>f :PymodeLintAuto<cr>
   nnoremap <leader>. :call OpenTestAlternate()<cr>
   noremap <leader>r :%s/old/new/gc
@@ -344,9 +346,9 @@ call deoplete#custom#source('_',  'max_kind_width', 0)
 
 nnoremap <leader>s :Ag! --python "\b\s?<C-R><C-W>\b"<CR>:cw<CR>:redr!<CR>
 
-let g:pymode_rope_rename_module_bind = '<leader> r'
 let g:golden_ratio_exclude_nonmodifiable = 1
 let g:goldenview__enable_default_mapping = 0
+
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 function! FZFOpen(command_str)
@@ -358,3 +360,7 @@ endfunction
 
 imap <C-L> <C-X><C-L> 
 let g:deoplete#max_list = 10
+let g:flake8_show_quickfix=1
+let g:flake8_show_in_gutter=1
+let g:flake8_show_in_file=1
+
