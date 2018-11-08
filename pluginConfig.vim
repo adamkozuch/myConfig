@@ -25,8 +25,8 @@ let g:fzf_action = {
   \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit' }
 
-command Gs Gstatus
-command Gc Gcommit
+"command Gs Gstatus
+"command Gc Gcommit
 
 call deoplete#custom#source('_',  'max_menu_width', 0)
 call deoplete#custom#source('_',  'max_abbr_width', 0)
