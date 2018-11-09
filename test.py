@@ -7,4 +7,9 @@ import attr
 from types import SimpleNamespace
 
 
-class TestFixtureMigratorUtils(unittest.TestCase):
+class Test(unittest.TestCase):
+
+    def test_first(self):
+        self.assertEqual('foo'.upper(), 'FOO')
+if __name__ == '__main__':
+    unittest.main()

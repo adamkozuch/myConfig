@@ -1,5 +1,9 @@
 
 call plug#begin()
+  Plug 'Shougo/Unite.vim'
+  Plug 'Shougo/tabpagebuffer.vim'
+  Plug 'ap/vim-buftabline'
+  Plug 'mrtazz/simplenote.vim'
   Plug 'Raimondi/delimitMate'
   Plug 'mhinz/vim-startify'
   Plug 'morhetz/gruvbox'
@@ -38,7 +42,9 @@ call plug#begin()
   Plug 'metakirby5/codi.vim'
 call plug#end()
 
-
+nnoremap <leader>a :!go run %
+let g:SimplenoteUsername = "adam.kozuch@gmail.com"
+let g:SimplenotePassword = "hujmnie"
 
 
 
@@ -191,6 +197,15 @@ hi ColorColumn ctermbg=0 guibg=#eee8d5
 let g:diminactive_use_syntax = 1
 
 function! LightlineFilename()
+  let root = fnamemodify(get(b:, 'git_dir'), ':h')
+  let path = expand('%:p')
+  if path[:len(root)-1] ==# root
+    return path[len(root)+1:]
+  endif
+  return expand('%')
+endfunction
+
+function! LightlineWorkingDirectory()
   let root = fnamemodify(get(b:, 'git_dir'), ':h')
   let path = expand('%:p')
   if path[:len(root)-1] ==# root
