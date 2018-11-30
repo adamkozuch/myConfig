@@ -1,4 +1,10 @@
-source ~/.vimrc
+let mapleader = " "
+set relativenumber
+inoremap jk <esc>
 nnoremap <leader>t :action GotoClass<CR>
 nnoremap <leader>n :action RenameFile<CR>
 nnoremap <leader>r :action Replace<CR>
+nnoremap <leader>a :action Run<CR>
+nnoremap <leader>u :action FindUsages<CR>
+nnoremap <leader>d :action ToggleDistractionFreeMode<CR>
+
