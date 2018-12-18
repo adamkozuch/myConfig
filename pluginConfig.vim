@@ -44,4 +44,3 @@ let g:lightline = {
       \   'filename': 'LightlineFilename'
       \ }
       \ }
-nnoremap <C-]> :call jedi#goto_definitions()<Cr>
