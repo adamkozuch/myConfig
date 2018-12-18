@@ -1,5 +1,6 @@
 
 call plug#begin()
+  Plug 'Yggdroot/indentLine'
   Plug 'Shougo/Unite.vim'
   Plug 'Shougo/tabpagebuffer.vim'
   Plug 'ap/vim-buftabline'
@@ -8,7 +9,6 @@ call plug#begin()
   Plug 'mhinz/vim-startify'
   Plug 'morhetz/gruvbox'
   Plug 'zhaocai/GoldenView.Vim'
-  Plug 'ensime/ensime-vim', { 'do': ':UpdateRemotePlugins' }
   Plug 'nvie/vim-flake8'
   Plug 'posva/vim-vue'
   Plug 'ternjs/tern_for_vim'
@@ -45,6 +45,8 @@ call plug#end()
 nnoremap <leader>a :!go run %
 let g:SimplenoteUsername = "adam.kozuch@gmail.com"
 let g:SimplenotePassword = "hujmnie"
+let g:indentLine_enabled = 0
+
 
 
 
@@ -234,3 +236,15 @@ endfunction
 source ~/myConfig/langConfig.vim
 source ~/myConfig/basicConfig.vim
 source ~/myConfig/pluginConfig.vim
+
+function! ResCur()
+  if line("'\"") <= line("$")
+    normal! g`"
+    return 1
+  endif
+endfunction
+
+augroup resCur
+  autocmd!
+  autocmd BufWinEnter * call ResCur()
+augroup END
