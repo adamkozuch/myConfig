@@ -31,8 +31,6 @@ vmap <C-Down> xp`[V`]
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
 imap <C-L> <C-X><C-L> 
 nnoremap <CR> za
-nnoremap ; : 
-nnoremap : ;
 nnoremap <tab> gt
 noremap <leader>f =i}
 map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>

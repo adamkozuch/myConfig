@@ -17,7 +17,7 @@ let g:fzf_command_prefix = 'Fzf'
 let g:notes_directories = ['~/Documents/Notes']
 nnoremap <silent> <leader>t :call FZFOpen(':FzfGFiles')<CR>
 nnoremap <leader>j :FzfBuffers<cr>
-map <C-n> ;NERDTreeToggle<CR>
+map <C-n> :NERDTreeToggle<CR>
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 let g:fzf_buffers_jump = 1
 let g:fzf_action = {

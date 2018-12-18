@@ -43,8 +43,6 @@ call plug#begin()
 call plug#end()
 
 nnoremap <leader>a :!go run %
-let g:SimplenoteUsername = "adam.kozuch@gmail.com"
-let g:SimplenotePassword = "hujmnie"
 let g:indentLine_enabled = 0
 
 
