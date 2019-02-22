@@ -1,10 +1,15 @@
 let mapleader = " "
-set relativenumber
+set number relativenumber
+set nu rnu
 inoremap jk <esc>
-nnoremap <leader>t :action GotoClass<CR>
+nnoremap <leader>t :action GotoFile<CR>
 nnoremap <leader>n :action RenameFile<CR>
-nnoremap <leader>r :action Replace<CR>
 nnoremap <leader>a :action Run<CR>
-nnoremap <leader>u :action FindUsages<CR>
 nnoremap <leader>d :action ToggleDistractionFreeMode<CR>
 
+nnoremap <C-l> <C-w>l
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-k> <C-w>k
+set surround
