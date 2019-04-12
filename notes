@@ -1,0 +1,1 @@
+#cp  ~/myConfig/prepare-commit-msg ./.git/hooks/
