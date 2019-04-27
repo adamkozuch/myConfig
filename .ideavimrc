@@ -13,3 +13,4 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-k> <C-w>k
 set surround
+map <Tab><Tab> :action RecentFiles<CR>

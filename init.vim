@@ -1,5 +1,7 @@
 
 call plug#begin()
+  Plug 'tweekmonster/django-plus.vim'
+  Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
   Plug 'Yggdroot/indentLine'
   Plug 'Shougo/Unite.vim'
   Plug 'Shougo/tabpagebuffer.vim'
@@ -42,7 +44,6 @@ call plug#begin()
   Plug 'metakirby5/codi.vim'
 call plug#end()
 
-nnoremap <leader>a :!go run %
 let g:indentLine_enabled = 0
 
 
@@ -117,7 +118,7 @@ endfunction
 function! RunPython()
   let file_name = expand('%')
   exec ':w' 
-  exec ':!python3 -m unittest'  file_name
+  exec ':!python3.7 -m unittest'  file_name
 endfunction
 
 function! OnJava()
@@ -216,8 +217,8 @@ endfunction
 
 
 
-colorscheme gruvbox
-
+"colorscheme gruvbox
+set notermguicolors
 nnoremap <leader>s :Ag! --python "\b\s?<C-R><C-W>\b"<CR>:cw<CR>:redr!<CR>
 
 
@@ -246,3 +247,6 @@ augroup resCur
   autocmd!
   autocmd BufWinEnter * call ResCur()
 augroup END
+noremap <A-g>  :FzfAg<Cr>
+noremap <A-q>  :q<Cr>
+noremap <A-r>  :call jedi#rename()<cr>
