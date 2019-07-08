@@ -1,7 +1,16 @@
 
 call plug#begin()
-  Plug 'tweekmonster/django-plus.vim'
-  Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+  "Plug 'stamblerre/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
+  "Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
+  "Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  Plug 'mihaifm/vimpanel'
+  Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
+  Plug 'python-rope/ropevim'
+  Plug 'MattesGroeger/vim-bookmarks'
+  Plug 'christoomey/vim-tmux-navigator'
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  Plug 'deoplete-plugins/deoplete-jedi'
+  Plug 'justinmk/vim-sneak'
   Plug 'Yggdroot/indentLine'
   Plug 'Shougo/Unite.vim'
   Plug 'Shougo/tabpagebuffer.vim'
@@ -10,20 +19,16 @@ call plug#begin()
   Plug 'Raimondi/delimitMate'
   Plug 'mhinz/vim-startify'
   Plug 'morhetz/gruvbox'
-  Plug 'zhaocai/GoldenView.Vim'
   Plug 'nvie/vim-flake8'
   Plug 'posva/vim-vue'
   Plug 'ternjs/tern_for_vim'
-  Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
   Plug 'airblade/vim-gitgutter'
   Plug 'bling/vim-bufferline'
   Plug 'jszakmeister/vim-togglecursor'
-  Plug 'zchee/deoplete-jedi'
   Plug 'davidhalter/jedi-vim'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-surround'
   Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   Plug '/usr/local/opt/fzf'
   Plug 'junegunn/fzf.vim'
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -34,14 +39,11 @@ call plug#begin()
   Plug 'itchyny/lightline.vim'
   Plug 'xolox/vim-lua-ftplugin'
   Plug 'xolox/vim-misc'
-  Plug 'chr4/nginx.vim'
+  "Plug 'chr4/nginx.vim'
   Plug 'vimwiki/vimwiki'
   Plug 'gcmt/taboo.vim'
-  Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
-  Plug 'metakirby5/codi.vim'
+  "Plug 'metakirby5/codi.vim'
+  "Plug 'beeender/Comrade'
 call plug#end()
 
 let g:indentLine_enabled = 0
@@ -116,9 +118,9 @@ function! RunScala()
 endfunction
 
 function! RunPython()
-  let file_name = expand('%')
+  let file_name = expand('%:p:h')
   exec ':w' 
-  exec ':!python3.7 -m unittest'  file_name
+  exec ':!./manage.py test --keepdb'  file_name
 endfunction
 
 function! OnJava()
@@ -247,6 +249,65 @@ augroup resCur
   autocmd!
   autocmd BufWinEnter * call ResCur()
 augroup END
-noremap <A-g>  :FzfAg<Cr>
+
+nnoremap <ESC>j :m+<CR>==
+
+noremap <A-s>  :FzfAg<CR>
 noremap <A-q>  :q<Cr>
 noremap <A-r>  :call jedi#rename()<cr>
+let g:jedi#jedi_completion_enabled = 1
+let g:jedi#completions_command = "<A-n>"
+let g:jedi#popup_on_dot = 1
+
+
+
+"set rtp+=~/.config/nvim/plugged/deoplete.nvim
+
+let g:python3_host_prog = '/usr/bin/python3.7'
+let g:deoplete#enable_at_startup = 1
+
+let g:deoplete#enable_profile = 1
+let g:sneak#use_ic_scs = 1
+let g:sneak#label = 0
+
+autocmd! bufwritepost .vimrc source %
+
+
+nnoremap <silent> s :<C-U>call sneak#wrap('',           2, 0, 2, 2)<CR>
+nnoremap <silent> S :<C-U>call sneak#wrap('',           2, 1, 2, 2)<CR>
+xnoremap <silent> s :<C-U>call sneak#wrap(visualmode(), 2, 0, 2, 2)<CR>
+xnoremap <silent> S :<C-U>call sneak#wrap(visualmode(), 2, 1, 2, 2)<CR>
+onoremap <silent> s :<C-U>call sneak#wrap(v:operator,   2, 0, 2, 2)<CR>
+onoremap <silent> S :<C-U>call sneak#wrap(v:operator,   2, 1, 2, 2)<CR>
+"makes clipboard common for system and vim
+set clipboard+=unnamedplus
+
+map <CR> <CR>
+noremap <A-j> }
+noremap <A-k> {
+noremap <A-g>  :FzfAg <CR>
+noremap <leader>sc  :FzfAg <CR>'class ):$ 
+noremap <leader>sm  :FzfAg <CR>'def ):$ 
+noremap <leader>su  :FzfAg <CR>!def !):$ 
+vnoremap <A-g> "hy:FzfAg <C-r>h<CR>
+vnoremap <leader>sc "hy:FzfAg <C-r>h<CR>'class ):$ 
+vnoremap <leader>sm "hy:FzfAg <C-r>h<CR>'def ):$ 
+vnoremap <leader>su "hy:FzfAg <C-r>h<CR>!def !):$  
+
+let g:jedi#smart_auto_mappings = 1
+iabbr deb from pudb set_trace
+highlight BookmarkSign ctermbg=NONE ctermfg=160
+highlight BookmarkLine ctermbg=194 ctermfg=NONE
+let g:bookmark_sign = '♥'
+let g:bookmark_highlight_lines = 1
+let g:bookmark_save_per_working_dir = 1
+let g:bookmark_auto_save = 1
+let g:jedi#usages_command = "<leader>y"
+"nnoremap <C-]> :call CocActionAsync('jumpDefinition')<cr>
+" Better display for messages
+set cmdheight=2
+
+" You will have bad experience for diagnostic messages when it's default 4000.
+set updatetime=300
+set autoread                                                                                                                                                                                    
+au CursorHold * checktime  

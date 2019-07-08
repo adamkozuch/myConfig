@@ -1,4 +1,3 @@
-
 let g:deoplete#max_list = 10
 let g:flake8_show_quickfix=1
 let g:flake8_show_in_gutter=1
@@ -31,16 +30,34 @@ let g:fzf_action = {
 call deoplete#custom#source('_',  'max_menu_width', 0)
 call deoplete#custom#source('_',  'max_abbr_width', 0)
 call deoplete#custom#source('_',  'max_kind_width', 0)
+function! StatusDiagnostic() abort
+  let info = get(b:, 'coc_diagnostic_info', {})
+  if empty(info) | return '' | endif
+  let msgs = []
+  if get(info, 'error', 0)
+    call add(msgs, 'E' . info['error'])
+  endif
+  if get(info, 'warning', 0)
+    call add(msgs, 'W' . info['warning'])
+  endif
+  return join(msgs, ' '). ' ' . get(g:, 'coc_status', '')
+endfunction
+
+function! LightlineCurrentDirectory(n) abort
+  return fnamemodify(getcwd(tabpagewinnr(a:n), a:n), ':t')
+endfunction
 
 let g:lightline = {
       \ 'colorscheme': 'landscape',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
-      \    'right': []
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified', 'current_dir' ] ],
+      \    'right': ['current_dir']
       \ },
       \ 'component_function': {
       \   'gitbranch': 'fugitive#head',
-      \   'filename': 'LightlineFilename'
+      \   'filename': 'LightlineFilename',
+      \   'cocstatus': 'coc#status',
+      \   'current_dir': 'LightlineCurrentDirectory',
       \ }
       \ }

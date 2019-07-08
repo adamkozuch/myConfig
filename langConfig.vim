@@ -7,7 +7,7 @@ endfunction
 function! OnPython()
   nnoremap <C-]>  :call jedi#goto_definitions()<CR>
   nnoremap ,test :-1read ~/myConfig/test.py<CR>/placeholder<CR>ciw
-  ab deb from pudb set_trace; set_trace()
+  iab deb from pudb set_trace; set_trace()
   noremap <leader>a  :call RunPython()<CR>
   set foldmethod=manual
   let g:jedi#show_call_signatures = 1
@@ -18,5 +18,4 @@ function! OnPython()
   nnoremap <leader>l :call Flake8()<cr>
   "nnoremap <leader>f :PymodeLintAuto<cr>
   nnoremap <leader>. :call OpenTestAlternate()<cr>
-  noremap <leader>r :%s/old/new/gc
 endfunction

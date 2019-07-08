@@ -14,7 +14,6 @@ noremap <leader>r :%s/old/new/gc
 noremap <leader>f =i}
 noremap <leader>c ciw
 noremap <leader>v v%
-noremap <cr> i<cr><esc>
 noremap <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
 map vv V
 tnoremap <Esc> <C-\><C-n>
@@ -46,6 +45,7 @@ noremap <leader>r :%s/\(<c-r>=expand("<cword>")<cr>\)//gc<LEFT><LEFT><LEFT>
 cnoremap %w <C-R>=expand("<cword>")<cr>
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
 cnoremap new tabnew 
-cnoremap rc e ~/myConfig/init.vim<C-b>
+cnoremap rce e ~/.config/nvim/init.vim<C-b>
+cnoremap rcs so ~/.config/nvim/init.vim<C-b>
 cnoremap test :!python3 -m unittest discover -s ./test/ -p 'Test*.py'
 noremap <C-h> <C-w>h

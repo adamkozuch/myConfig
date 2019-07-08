@@ -4,7 +4,8 @@
 # Path to your oh-my-zsh installation.
   export ZSH=/home/kozucha/.oh-my-zsh
 
-# Set name of the theme to load. Optionally, if you set this to "random"
+
+  # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="robbyrussell"
@@ -68,19 +69,25 @@ source $ZSH/oh-my-zsh.sh
 alias pycharm=/home/kozucha/Pobrane/pycharm-community-2018.1.1/bin/pycharm.sh
 alias sport=/home/kozucha/Projects/sportProject
 
+export PATH=/home/kozucha/.local/bin:$PATH
+export PATH=/home/kozucha/.local/lib/python3.6/site-packages:$PATH
+
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
-# You may need to manually set your language environment
+# You may need to
+# manually set your language environment
 # export LANG=en_US.UTF-8
 
-# Preferred editor for local and remote sessions
+#
+#Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
 #   export EDITOR='vim'
 # else
 #   export EDITOR='mvim'
 # fi
+
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -153,4 +160,6 @@ dalias() { alias | grep 'docker' | sed "s/^\([^=]*\)=\(.*\)/\1 => \2/"| sed "s/[
 # Bash into running container
 dbash() { docker exec -it $(docker ps -aqf "name=$1") bash; }
 alias vs="vim -c 'Gstatus | wincmd j | hide' f"
+
 alias vb="vim -c 'Gblame' f"
+alias gold="cd ~/projects/IT-GOLD"
