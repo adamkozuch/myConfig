@@ -2,35 +2,38 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-  export ZSH=/home/kozucha/.oh-my-zsh
+export ZSH="/home/kozucha/.oh-my-zsh"
 
-
-  # Set name of the theme to load. Optionally, if you set this to "random"
-# it'll load a random theme each time that oh-my-zsh is loaded.
+# Set name of the theme to load --- if set to "random", it will
+# load a random theme each time oh-my-zsh is loaded, in which case,
+# to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="robbyrussell"
-set -o vi
-alias vim=nvim
 
-# Set list of themes to load
-# Setting this variable when ZSH_THEME=random
-# cause zsh load theme from this variable instead of
-# looking in ~/.oh-my-zsh/themes/
-# An empty array have no effect
+# Set list of themes to pick from when loading at random
+# Setting this variable when ZSH_THEME=random will cause zsh to load
+# a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
+# If set to an empty array, this variable will have no effect.
 # ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
 
-# Uncomment the following line to use hyphen-insensitive completion. Case
-# sensitive completion must be off. _ and - will be interchangeable.
+# Uncomment the following line to use hyphen-insensitive completion.
+# Case-sensitive completion must be off. _ and - will be interchangeable.
 # HYPHEN_INSENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
 # DISABLE_AUTO_UPDATE="true"
 
+# Uncomment the following line to automatically update without prompting.
+# DISABLE_UPDATE_PROMPT="true"
+
 # Uncomment the following line to change how often to auto-update (in days).
 # export UPDATE_ZSH_DAYS=13
+
+# Uncomment the following line if pasting URLs and other text is messed up.
+# DISABLE_MAGIC_FUNCTIONS=true
 
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
@@ -51,49 +54,40 @@ alias vim=nvim
 
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
-# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# You can set one of the optional three formats:
+# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# or set a custom format using the strftime function format specifications,
+# see 'man strftime' for details.
 # HIST_STAMPS="mm/dd/yyyy"
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# Which plugins would you like to load?
+# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(
-  git, vi-mode
-)
+plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
-alias pycharm=/home/kozucha/Pobrane/pycharm-community-2018.1.1/bin/pycharm.sh
-alias sport=/home/kozucha/Projects/sportProject
-
-export PATH=/home/kozucha/.local/bin:$PATH
-export PATH=/home/kozucha/.local/lib/python3.6/site-packages:$PATH
 
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
-# You may need to
-# manually set your language environment
+# You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
-#
-#Preferred editor for local and remote sessions
+# Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
 #   export EDITOR='vim'
 # else
 #   export EDITOR='mvim'
 # fi
 
-
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
-
-# ssh
-# export SSH_KEY_PATH="~/.ssh/rsa_id"
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
@@ -105,61 +99,17 @@ export PATH=/home/kozucha/.local/lib/python3.6/site-packages:$PATH
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+ alias glog="git log --oneline --decorate --color --graph -10"
+ alias gold="cd /home/kozucha/next_disk_migrate/projects/IT-GOLD/"
+ setxkbmap -layout us -option ctrl:nocaps
 
-eval $(thefuck --alias)
-alias pbcopy='xclip -selection clipboard'
-alias pbpaste='xclip -selection clipboard -o'
-source ~/.oh-my-zsh/plugins/git/git.plugin.zsh
-git config --global core.pager "diff-so-fancy | less --tabs=4 -RFX"
-alias greset='git checkout -- .'
-alias pycharm='/home/kozucha/Pobrane/pycharm-community-2018.3/bin/pycharm.sh'
-alias webs='/home/kozucha/Pobrane/WebStorm-183.4284.130/bin/webstorm.sh'
-alias prod='docker exec -it backend-prod /bin/bash'
-# Get latest container ID
-alias dl="docker ps -l -q"
+	[[ -s /home/kozucha/.autojump/etc/profile.d/autojump.sh ]] && source /home/kozucha/.autojump/etc/profile.d/autojump.sh
+ alias move_untracked=$(IFS=$'\n' &&
+for file in $(git ls-files --others --exclude-standard); do mkdir -p ../backup/$(dirname $file) ; mv $file ../backup/$file ; done &&
+unset IFS)
+alias g='googler'
+alias h='how2 -l python'
 
-# Get container process
-alias dps="docker ps"
-
-# Get process included stop container
-alias dpa="docker ps -a"
-
-# Get images
-alias di="docker images"
-
-# Get container IP
-alias dip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
-
-# Run deamonized container, e.g., $dkd base /bin/echo hello
-alias dkd="docker run -d -P"
-
-# Run interactive container, e.g., $dki base /bin/bash
-alias dki="docker run -i -t -P"
-
-# Execute interactive container, e.g., $dex base /bin/bash
-alias dex="docker exec -i -t"
-
-# Stop all containers
-dstop() { docker stop $(docker ps -a -q); }
-
-# Remove all containers
-drm() { docker rm $(docker ps -a -q); }
-
-# Stop and Remove all containers
-alias drmf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
-
-# Remove all images
-dri() { docker rmi $(docker images -q); }
-
-# Dockerfile build, e.g., $dbu tcnksm/test 
-dbu() { docker build -t=$1 .; }
-
-# Show all alias related docker
-dalias() { alias | grep 'docker' | sed "s/^\([^=]*\)=\(.*\)/\1 => \2/"| sed "s/['|\']//g" | sort; }
-
-# Bash into running container
-dbash() { docker exec -it $(docker ps -aqf "name=$1") bash; }
-alias vs="vim -c 'Gstatus | wincmd j | hide' f"
-
-alias vb="vim -c 'Gblame' f"
-alias gold="cd ~/projects/IT-GOLD"
+# tabtab source for packages
+# uninstall by removing these lines
+[ -f ~/.config/tabtab/__tabtab.bash ] && . ~/.config/tabtab/__tabtab.bash || true
