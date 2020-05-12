@@ -6,19 +6,14 @@ call plug#begin()
   Plug 'MattesGroeger/vim-bookmarks'
   Plug 'christoomey/vim-tmux-navigator'
   "Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-  "Plug 'deoplete-plugins/deoplete-jedi'
   Plug 'Shougo/Unite.vim'
   Plug 'Shougo/tabpagebuffer.vim'
   Plug 'ap/vim-buftabline'
-  Plug 'Raimondi/delimitMate'
   Plug 'mhinz/vim-startify'
   Plug 'morhetz/gruvbox'
-  Plug 'nvie/vim-flake8'
-  Plug 'posva/vim-vue'
   Plug 'airblade/vim-gitgutter'
   Plug 'bling/vim-bufferline'
   Plug 'jszakmeister/vim-togglecursor'
-  "Plug 'davidhalter/jedi-vim'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-surround'
   Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
@@ -29,20 +24,48 @@ call plug#begin()
   Plug 'rking/ag.vim'
   Plug 'tpope/vim-repeat'
   Plug 'itchyny/lightline.vim'
-  Plug 'xolox/vim-lua-ftplugin'
   Plug 'xolox/vim-misc'
-  Plug 'vimwiki/vimwiki'
   Plug 'gcmt/taboo.vim'
   "Plug 'neovim/nvim-lsp'
   Plug 'janko/vim-test'
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+ Plug 'neoclide/coc.nvim', {'tag': '*', 'branch': 'release'}
 call plug#end()
 
 autocmd FileType fzf tnoremap <buffer> <A-j> <Down>
 autocmd FileType fzf tnoremap <buffer> <A-k> <Up>
 nnoremap <ESC>j :m+<CR>==
 
+if executable('pyls')
+    " pip install python-language-server
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'pyls',
+        \ 'cmd': {server_info->['pyls']},
+        \ 'whitelist': ['python'],
+        \ })
+endif
+
+function! s:on_lsp_buffer_enabled() abort
+    setlocal omnifunc=lsp#complete
+    setlocal signcolumn=yes
+    nmap <buffer> gd <plug>(lsp-definition)
+    nmap <buffer> <f2> <plug>(lsp-rename)
+    " refer to doc to add more commands
+endfunction
+
+
+augroup lsp_install
+    au!
+    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
+    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
+
 let g:indentLine_enabled = 0
+
+let g:lsp_log_verbose = 1
+let g:lsp_log_file = expand('~/vim-lsp.log')
+
+" for asyncomplete.vim log
+let g:asyncomplete_log_file = expand('~/asyncomplete.log')
 
 
 let test#strategy = "vimux"
@@ -161,10 +184,10 @@ function! AlternateForCurrentFile()
   return new_file
 endfunction
 
-autocmd BufNewFile,BufRead *.java :call OnJava()
-autocmd BufNewFile,BufRead *.js :call OnJS()
-autocmd BufNewFile,BufRead *.scala :call OnScala()
-autocmd BufNewFile,BufRead *.py :call OnPython()
+"autocmd BufNewFile,BufRead *.java :call OnJava()
+"autocmd BufNewFile,BufRead *.js :call OnJS()
+"autocmd BufNewFile,BufRead *.scala :call OnScala()
+"autocmd BufNewFile,BufRead *.py :call OnPython()
 
 map <leader>n :call RenameFile()<cr>
 set wildignore+=node_modules,*.png,*.dll,*.class,*.cache,*.xml
@@ -182,15 +205,6 @@ autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 inoremap <silent><expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 " use tab to backward cycle
 inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
-
-" Lazy load Deoplete to reduce statuptime
-" See manpage
-" Enable deoplete when InsertEnter.
-
-
-"MAPINGS
-
-
 
 
 hi ColorColumn ctermbg=0 guibg=#eee8d5
@@ -248,21 +262,15 @@ nnoremap <ESC>j :m+<CR>==
 
 noremap <A-s>  :FzfAg<CR>
 noremap <A-q>  :q<Cr>
-noremap <A-r>  :call jedi#rename()<cr>
 
 
-"let g:jedi#jedi_completion_enabled = 1
-let g:jedi#completions_command = "<A-n>"
-let g:jedi#popup_on_dot = 1
 
 
 
 "set rtp+=~/.config/nvim/plugged/deoplete.nvim
 
 let g:python3_host_prog = '/usr/bin/python3'
-let g:deoplete#enable_at_startup = 1
 
-let g:deoplete#enable_profile = 1
 let g:sneak#use_ic_scs = 1
 let g:sneak#label = 0
 
@@ -281,72 +289,48 @@ set clipboard+=unnamedplus
 map <CR> <CR>
 inoremap <A-j> Down
 inoremap <A-k> Up
+
 noremap <leader>sc  :FzfAg <CR>'class ):$ 
 noremap <leader>sm  :FzfAg <CR>'def ):$ 
 noremap <leader>su  :FzfAg <CR>!def !):$ 
-vnoremap <A-g> "hy:FzfAg <C-r>h<CR>
+vnoremap <A-g> "hy :FzfAg <C-r>h<CR>
 vnoremap <leader>sc "hy:FzfAg <C-r>h<CR>'class ):$ 
 vnoremap <leader>sm "hy:FzfAg <C-r>h<CR>'def ):$ 
 vnoremap <leader>su "hy:FzfAg <C-r>h<CR>!def !):$  
 
-let g:jedi#smart_auto_mappings = 1
 iabbr deb from pudb set_trace
 highlight BookmarkSign ctermbg=NONE ctermfg=160
 highlight BookmarkLine ctermbg=194 ctermfg=NONE
 let g:bookmark_sign = '♥'
 let g:bookmark_highlight_lines = 1
 let g:bookmark_auto_save = 1
-let g:jedi#usages_command = "<leader>y"
-let g:jedi#usages_command = "<leader>y"
-"let g:jedi#use_splits_not_buffers = "top"
-"nnoremap <C-]> :call CocActionAsync('jumpDefinition')<cr>
+nnoremap <C-]> :call CocActionAsync('jumpDefinition')<cr>
 
 " You will have bad experience for diagnostic messages when it's default 4000.
 set updatetime=300
 set autoread                                                                                                                                                                                    
 au CursorHold * checktime  
-let g:LanguageClient_serverCommands = { 'python': ['/home/kozucha/.local/bin/pyls'] }
-
-"let g:LanguageClient_diagnosticsDisplay = {
-  "\1: {'name': 'Error', 'texthl': 'ALEError",', 'signText': 'I', 'signTexthl': '',},
-  "\2: {'name': 'Warning', 'texthl': 'signText', 'signText': '', 'signTexthl': 'ALEWarningSign',},
-  "\3: {'name': 'Information', 'texthl': 'signText', 'signText': '', 'signTexthl': 'ALEInfoSign',},
-  "\4: {'name': 'Hint', 'texthl': 'ALEInfo', 'signText': '', 'signTexthl': 'ALEInfoSign',},
-  "\}
+let g:LanguageClient_serverCommands = { 'python': ['/home/adam/.local/bin/pyls'] }
 
 let g:bookmark_highlight_lines = 0
 let g:bookmark_auto_save = 1
-let g:bookmark_auto_save_file = '/home/kozucha/bookmarks'
+let g:bookmark_auto_save_file = '/home/adam/bookmarks'
 " Or map each action separately
+nmap <A-r> <Plug>(coc-rename)
 
-function! OnJS()
-  abbr log console.log("");<Left><Left><Left>
-  noremap <leader>a  :call RunNode()<CR>
-endfunction
 
 function! OnPython()
-  "nnoremap <C-]>  :call jedi#goto_definitions()<CR>
   nnoremap ,test :-1read ~/myConfig/test.py<CR>/placeholder<CR>ciw
-  iab deb from pudb set_trace; set_trace()
   noremap <leader>a  :TestNearest<cr>
   set foldmethod=manual
-  "let g:jedi#show_call_signatures = 1
-  "let g:jedi#popup_on_dot = 0
-  "let g:jedi#use_tabs_not_buffers = 0
-  "let g:jedi#usages_command = "<leader>s"
-  "let g:jedi#rename_command = "<leader>r"
-  nnoremap <leader>l :call Flake8()<cr>
   "nnoremap <leader>f :PymodeLintAuto<cr>
-  nnoremap <leader>. :call OpenTestAlternate()<cr>
 endfunction
 
-let g:deoplete#max_list = 10
 let g:flake8_show_quickfix=1
 let g:flake8_show_in_gutter=1
 let g:flake8_show_in_file=1
 let g:golden_ratio_exclude_nonmodifiable = 1
 let g:goldenview__enable_default_mapping = 0
-let g:deoplete#enable_at_startup = 1
 
 let g:fzf_command_prefix = 'Fzf'
 let g:notes_directories = ['~/Documents/Notes']
@@ -363,9 +347,6 @@ let g:fzf_action = {
 "command Gs Gstatus
 "command Gc Gcommit
 
-call deoplete#custom#source('_',  'max_menu_width', 0)
-call deoplete#custom#source('_',  'max_abbr_width', 0)
-call deoplete#custom#source('_',  'max_kind_width', 0)
 function! StatusDiagnostic() abort
   let info = get(b:, 'coc_diagnostic_info', {})
   if empty(info) | return '' | endif
@@ -387,7 +368,7 @@ let g:lightline = {
       \ 'colorscheme': 'landscape',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified'] ],
+      \             [ 'cocstatus', 'gitbranch', 'readonly', 'filename', 'modified'] ],
       \    'right': []
       \ },
       \ 'component_function': {
@@ -466,7 +447,6 @@ noremap <Down> <c-w>+
 
 noremap <leader>s <C-c>:w<cr>
 
-let g:jedi#goto_definitions_command = "<C-]>"
 noremap <leader>r :%s/\(<c-r>=expand("<cword>")<cr>\)//gc<LEFT><LEFT><LEFT>
 cnoremap %w <C-R>=expand("<cword>")<cr>
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
@@ -489,6 +469,7 @@ if &diff
     hi DiffChange ctermbg=white  guibg=#ececec gui=none   cterm=none
     hi DiffText   ctermfg=233  ctermbg=yellow  guifg=#000033 guibg=#DDDDFF gui=none cterm=none
 endif
+
 noremap <A-g>  :FzfAg <CR>
 noremap <A-c>  :Gstatus <CR>
 noremap <A-b>  :BookmarkShowAll <CR>
@@ -500,3 +481,4 @@ noremap <A-g>  :FzfAg <CR>
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 nmap <silent> <C-]> <Plug>(coc-definition)
 nmap <silent> gi <Plug>(coc-implementation)
+nnoremap <expr> <A-j> &diff ? ']c' : '<C-W>j'
