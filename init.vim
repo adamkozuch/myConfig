@@ -6,6 +6,7 @@ call plug#begin()
   Plug 'MattesGroeger/vim-bookmarks'
   Plug 'christoomey/vim-tmux-navigator'
   "Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  Plug 'justinmk/vim-sneak'
   Plug 'Shougo/Unite.vim'
   Plug 'Shougo/tabpagebuffer.vim'
   Plug 'ap/vim-buftabline'
@@ -310,11 +311,11 @@ nnoremap <C-]> :call CocActionAsync('jumpDefinition')<cr>
 set updatetime=300
 set autoread                                                                                                                                                                                    
 au CursorHold * checktime  
-let g:LanguageClient_serverCommands = { 'python': ['/home/adam/.local/bin/pyls'] }
+let g:LanguageClient_serverCommands = { 'python': [$HOME . '/.local/bin/pyls'] }
 
 let g:bookmark_highlight_lines = 0
 let g:bookmark_auto_save = 1
-let g:bookmark_auto_save_file = '/home/adam/bookmarks'
+let g:bookmark_auto_save_file = $HOME . '/bookmarks'
 " Or map each action separately
 nmap <A-r> <Plug>(coc-rename)
 
@@ -482,3 +483,4 @@ nnoremap <silent> K :call <SID>show_documentation()<CR>
 nmap <silent> <C-]> <Plug>(coc-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nnoremap <expr> <A-j> &diff ? ']c' : '<C-W>j'
+nnoremap <expr> <A-k> &diff ? '[c' : '<C-W>j'
