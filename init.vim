@@ -484,3 +484,11 @@ nmap <silent> <C-]> <Plug>(coc-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nnoremap <expr> <A-j> &diff ? ']c' : '<C-W>j'
 nnoremap <expr> <A-k> &diff ? '[c' : '<C-W>j'
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
