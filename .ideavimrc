@@ -13,4 +13,13 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-k> <C-w>k
 set surround
+set hi
+set hls
+set ic
+set is
 map <Tab><Tab> :action RecentFiles<CR>
+
+nnoremap mm  :action ToggleBookmarkWithMnemonic<CR>
+nnoremap mb  :action ToggleLineBreakpoint<CR>
+nnoremap <A-j> 10j
+nnoremap <A-k> 10k
