@@ -1,11 +1,11 @@
 
 call plug#begin()
+  Plug 'junegunn/vim-peekaboo'
   Plug 'chrisbra/vim-diff-enhanced'
   Plug 'mihaifm/vimpanel'
   Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
   Plug 'MattesGroeger/vim-bookmarks'
   Plug 'christoomey/vim-tmux-navigator'
-  "Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   Plug 'justinmk/vim-sneak'
   Plug 'Shougo/Unite.vim'
   Plug 'Shougo/tabpagebuffer.vim'
@@ -262,6 +262,7 @@ augroup END
 nnoremap <ESC>j :m+<CR>==
 
 noremap <A-s>  :FzfAg<CR>
+noremap <A-h>  :FzfHistory<CR>
 noremap <A-q>  :q<Cr>
 
 
@@ -492,3 +493,31 @@ function! s:show_documentation()
     call CocAction('doHover')
   endif
 endfunction
+
+
+
+if exists('*complete_info')
+  inoremap <expr> <tab> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+else
+  inoremap <expr> <tab> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+endif
+inoremap <silent><expr> <c-space> coc#refresh()
+
+let peekaboo_compact = 0
+
+
+function! GotoJump()
+  jumps
+  let j = input("Please select your jump: ")
+  if j != ''
+    let pattern = '\v\c^\+'
+    if j =~ pattern
+      let j = substitute(j, pattern, '', 'g')
+      execute "normal " . j . "\<c-i>"
+    else
+      execute "normal " . j . "\<c-o>"
+    endif
+  endif
+endfunction
+
+
