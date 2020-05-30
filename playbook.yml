@@ -76,3 +76,9 @@
   - name: Install java etc
     apt: name={{ item }} state=latest update_cache=yes
     loop: [ 'openjdk-11-jdk']
+
+  - name: Install pycharm
+    snap:
+      name: pycharm-professional
+      classic: yes
+      
