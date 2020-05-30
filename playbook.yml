@@ -1,0 +1,78 @@
+---
+- hosts: localhost
+  become: yes
+  vars:
+    default_dir: '/home/adam/'
+  tasks:
+  - name: Run the equivalent of "apt-get update" as a separate step
+    apt:
+      update_cache: yes
+  - name: Install nvim
+    package:
+      name: neovim
+      state: present
+  - name: Install aptitude using apt
+    apt: name=aptitude state=latest update_cache=yes force_apt_get=yes
+
+  - name: Install required system packages
+    apt: name={{ item }} state=latest update_cache=yes
+    loop: [ 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', 'python3-pip', 'virtualenv', 'python3-setuptools']
+
+  - name: Add Docker GPG apt Key
+    apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      state: present
+
+  - name: Add Docker Repository
+    apt_repository:
+      repo: deb https://download.docker.com/linux/ubuntu bionic stable
+      state: present
+
+  - name: Update apt and install docker-ce
+    apt: update_cache=yes name=docker-ce state=latest
+
+  - name: Install Docker Module for Python
+    pip:
+      name: docker
+  - name: Install Docker Compose
+    pip:
+      name: docker-compose
+
+  - name: Install tmux
+    apt: name={{ item }} state=latest update_cache=yes
+    loop: [ 'tmuxinator', 'tmux']
+
+  - name: Install python helpers
+    pip: name={{ item }}
+    loop: [ 'ptpython', 'ipython']
+
+  - name: Installing Zsh and git
+    apt: pkg=zsh,git,npm  state=latest
+    register: installation
+
+  - name: Cloning  oh-my-zsh
+    git:
+      repo=https://github.com/robbyrussell/oh-my-zsh
+      dest={{ default_dir }}/.oh-my-zsh
+
+  - name: CLone configs
+    git:
+      repo=https://github.com/adamkozuch/myConfig.git
+      dest={{ default_dir }}.my-config
+
+  - name: Nvim configure
+    copy:
+      src={{ default_dir }}.my-config/init.vim
+      dest={{ default_dir }}/.config/nvim/init.vim
+
+  - name: Nvim install packages
+    command: vim +PlugInstall +qall
+
+  - name: Config zshrc
+    copy:
+      src={{ default_dir }}.my-config/.zshrc
+      dest={{ default_dir }}/.zshrc
+
+  - name: Install java etc
+    apt: name={{ item }} state=latest update_cache=yes
+    loop: [ 'openjdk-11-jdk']
