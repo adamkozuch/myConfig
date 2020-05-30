@@ -1,5 +1,6 @@
 
 call plug#begin()
+  Plug 'benmills/vimux'
   Plug 'junegunn/vim-peekaboo'
   Plug 'chrisbra/vim-diff-enhanced'
   Plug 'mihaifm/vimpanel'
@@ -236,6 +237,7 @@ set notermguicolors
 nnoremap <leader>s :Ag! --python "\b\s?<C-R><C-W>\b"<CR>:cw<CR>:redr!<CR>
 
 
+
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 function! FZFOpen(command_str)
@@ -295,10 +297,6 @@ inoremap <A-k> Up
 noremap <leader>sc  :FzfAg <CR>'class ):$ 
 noremap <leader>sm  :FzfAg <CR>'def ):$ 
 noremap <leader>su  :FzfAg <CR>!def !):$ 
-vnoremap <A-g> "hy :FzfAg <C-r>h<CR>
-vnoremap <leader>sc "hy:FzfAg <C-r>h<CR>'class ):$ 
-vnoremap <leader>sm "hy:FzfAg <C-r>h<CR>'def ):$ 
-vnoremap <leader>su "hy:FzfAg <C-r>h<CR>!def !):$  
 
 iabbr deb from pudb set_trace
 highlight BookmarkSign ctermbg=NONE ctermfg=160
@@ -323,7 +321,6 @@ nmap <A-r> <Plug>(coc-rename)
 
 function! OnPython()
   nnoremap ,test :-1read ~/myConfig/test.py<CR>/placeholder<CR>ciw
-  noremap <leader>a  :TestNearest<cr>
   set foldmethod=manual
   "nnoremap <leader>f :PymodeLintAuto<cr>
 endfunction
@@ -338,7 +335,6 @@ let g:fzf_command_prefix = 'Fzf'
 let g:notes_directories = ['~/Documents/Notes']
 nnoremap <silent> <leader>t :call FZFOpen(':FzfGFiles')<CR>
 nnoremap <leader>j :FzfBuffers<cr>
-map <C-n> :NERDTreeToggle<CR>
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 let g:fzf_buffers_jump = 1
 let g:fzf_action = {
@@ -454,9 +450,7 @@ cnoremap %w <C-R>=expand("<cword>")<cr>
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
 cnoremap new tabnew 
 cnoremap ter terminal 
-cnoremap cce e ~/.config/nvim/init.vim<C-b>
-cnoremap rcs so ~/.config/nvim/init.vim<C-b>
-cnoremap test :!python3 -m unittest discover -s ./test/ -p 'Test*.py'
+cnoremap rc e ~/.config/nvim/init.vim<C-b>
 noremap <C-h> <C-w>h
 set signcolumn=yes
 
@@ -472,12 +466,22 @@ if &diff
     hi DiffText   ctermfg=233  ctermbg=yellow  guifg=#000033 guibg=#DDDDFF gui=none cterm=none
 endif
 
-noremap <A-g>  :FzfAg <CR>
+
+command! -bang -nargs=* GGrep
+  \ call fzf#vim#grep(
+  \   'git grep --line-number -- '.shellescape(<q-args>), 0,
+  \   fzf#vim#with_preview({'dir': systemlist('git rev-parse --show-toplevel')[0], 'options': '--delimiter : --nth 3..'}), <bang>0)
+
+vnoremap <A-g> "hy:GGrep <C-r>h<CR>
+vnoremap <leader>sc "hy:FzfAg <C-r>h<CR>'class ):$ 
+vnoremap <leader>sm "hy:FzfAg <C-r>h<CR>'def ):$ 
+vnoremap <leader>su "hy:FzfAg <C-r>h<CR>!def !):$  
+
+noremap <A-g>  :GGrep<CR>
 noremap <A-c>  :Gstatus <CR>
 noremap <A-b>  :BookmarkShowAll <CR>
 noremap <A-n>  :BookmarkNext <CR>zz
 noremap <A-N>  :BookmarkPrev <CR>zz
-noremap <A-g>  :FzfAg <CR>
 
 
 nnoremap <silent> K :call <SID>show_documentation()<CR>
@@ -490,10 +494,9 @@ function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
     execute 'h '.expand('<cword>')
   else
-    call CocAction('doHover')
+    call CocActionAsync('doHover')
   endif
-endfunction
-
+endfunction 
 
 
 if exists('*complete_info')
@@ -501,9 +504,10 @@ if exists('*complete_info')
 else
   inoremap <expr> <tab> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 endif
-inoremap <silent><expr> <c-space> coc#refresh()
+inoremap <silent><expr> <c-n> coc#refresh()
 
 let peekaboo_compact = 0
+" MOST IMPORTANT FIX GREP
 
 
 function! GotoJump()
@@ -520,4 +524,28 @@ function! GotoJump()
   endif
 endfunction
 
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+nnoremap <leader>a  :TestNearest --keepdb -n<cr>
+nnoremap <leader>b  :VimuxRunCommand '/scripts/run_black && /scripts/run_isort'<cr>
+nnoremap <silent> <Leader>g :GGrep <C-R><C-W><CR>
+imap <C-l> <Plug>(coc-snippets-expand)
+
+nnoremap <silent> <C-h> :TmuxNavigateLeft<cr>
+nnoremap <silent> <C-j> :TmuxNavigateDown<cr>
+nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
+nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
+
+noremap <A-j> 10j
+noremap <A-k> 10k
+autocmd TextChanged,TextChangedI <buffer> silent write
+map <A-n> :NERDTreeToggle<CR>
